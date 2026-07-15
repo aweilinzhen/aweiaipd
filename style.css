@@ -112,3 +112,68 @@ body {
     page-break-after: auto;
   }
 }
+
+.page-actions {
+  position: fixed;
+  top: 20px;
+  right: 24px;
+  z-index: 20;
+}
+
+.print-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 16px;
+  border: 1px solid rgb(0 0 0 / 10%);
+  border-radius: 10px;
+  background: #111;
+  color: #fff;
+  font: 600 15px/1 Arial, "Microsoft YaHei", sans-serif;
+  box-shadow: 0 6px 18px rgb(0 0 0 / 18%);
+  cursor: pointer;
+  transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+}
+
+.print-button:hover {
+  transform: translateY(-1px);
+  background: #252525;
+  box-shadow: 0 8px 22px rgb(0 0 0 / 22%);
+}
+
+.print-button:active {
+  transform: translateY(0);
+}
+
+.print-button:focus-visible {
+  outline: 3px solid rgb(0 102 255 / 35%);
+  outline-offset: 3px;
+}
+
+.print-button svg {
+  width: 19px;
+  height: 19px;
+  fill: currentColor;
+}
+
+@media (max-width: 720px) {
+  .page-actions {
+    top: auto;
+    right: 14px;
+    bottom: 14px;
+  }
+
+  .print-button {
+    min-height: 40px;
+    padding: 0 14px;
+    border-radius: 999px;
+  }
+}
+
+@media print {
+  .page-actions {
+    display: none !important;
+  }
+}
