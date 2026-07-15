@@ -160,15 +160,7 @@ body {
 
 @media (max-width: 720px) {
   .page-actions {
-    top: auto;
-    right: 14px;
-    bottom: 14px;
-  }
-
-  .print-button {
-    min-height: 40px;
-    padding: 0 14px;
-    border-radius: 999px;
+    display: none !important;
   }
 }
 
