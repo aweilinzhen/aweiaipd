@@ -89,30 +89,45 @@ body {
   html,
   body {
     width: 210mm;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
     background: #fff;
+    overflow: visible;
+  }
+
+  .page-actions,
+  .semantic-text {
+    display: none !important;
   }
 
   .resume {
     display: block;
+    width: 210mm;
+    margin: 0;
     padding: 0;
   }
 
   .resume-page {
+    display: block;
     width: 210mm;
     height: 297mm;
     aspect-ratio: auto;
     margin: 0;
+    overflow: hidden;
     box-shadow: none;
-    break-after: page;
-    page-break-after: always;
-  }
-
-  .resume-page:last-child {
+    break-inside: avoid;
+    page-break-inside: avoid;
     break-after: auto;
     page-break-after: auto;
   }
-}
 
+  .resume-page:not(:first-of-type) {
+    break-before: page;
+    page-break-before: always;
+  }
+}
 .page-actions {
   position: fixed;
   top: 20px;
@@ -164,8 +179,3 @@ body {
   }
 }
 
-@media print {
-  .page-actions {
-    display: none !important;
-  }
-}
