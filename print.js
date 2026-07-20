@@ -130,6 +130,20 @@
       }
     );
 
+  const waitForWindowLoad = () => {
+    if (document.readyState === "complete") {
+      return Promise.resolve();
+    }
+
+    return new Promise((resolve) => {
+      window.addEventListener(
+        "load",
+        resolve,
+        { once: true }
+      );
+    });
+  };
+
   const waitForImages = async () => {
     const images =
       Array.from(
@@ -218,8 +232,33 @@
     }
   };
 
+  const verifyPrintableText = () => {
+    const sample =
+      root.querySelector(
+        "h1, .section-title, .entry-heading h3, .bullet-list li"
+      );
+
+    if (!sample) {
+      return;
+    }
+
+    const style =
+      window.getComputedStyle(sample);
+
+    console.info(
+      "打印文字检查：",
+      {
+        text: sample.textContent?.trim().slice(0, 30),
+        color: style.color,
+        visibility: style.visibility,
+        opacity: style.opacity
+      }
+    );
+  };
+
   const startPrint = async () => {
     try {
+      await waitForWindowLoad();
       if (
         document.fonts &&
         document.fonts.ready
@@ -233,18 +272,23 @@
       await waitForPaint();
 
       checkPageOverflow();
+      verifyPrintableText();
 
       /*
-        给 Chrome 一次稳定布局/绘制机会，
-        避免打印预览抓到尚未完成文字栅格化的帧。
+        新窗口中的 DOM 是运行时写入的。
+        Chrome 的打印合成器偶尔会比屏幕绘制更早抓取页面，
+        因此在字体、图片和两帧绘制完成后再额外等待一小段稳定时间。
       */
       await new Promise(
         (resolve) =>
           window.setTimeout(
             resolve,
-            250
+            900
           )
       );
+
+      void root.offsetHeight;
+      await waitForPaint();
 
       window.focus();
       window.print();
