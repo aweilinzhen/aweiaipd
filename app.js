@@ -76,5 +76,54 @@
       ${section("教育经历", educationHtml)}
     </section>`;
 
-  document.querySelector("#printButton").addEventListener("click", () => window.print());
+  const printButton = document.querySelector("#printButton");
+
+  async function waitForPrintReady() {
+    const images = Array.from(document.images);
+
+    await Promise.all(images.map(async (img) => {
+      if (!img.complete) {
+        await new Promise((resolve) => {
+          img.addEventListener("load", resolve, { once: true });
+          img.addEventListener("error", resolve, { once: true });
+        });
+      }
+
+      if (typeof img.decode === "function") {
+        try {
+          await img.decode();
+        } catch (_) {}
+      }
+    }));
+
+    if (document.fonts?.ready) {
+      try {
+        await document.fonts.ready;
+      } catch (_) {}
+    }
+  }
+
+  printButton?.addEventListener("click", async () => {
+    printButton.disabled = true;
+
+    try {
+      await waitForPrintReady();
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          printButton.disabled = false;
+          window.print();
+        });
+      });
+    } catch (_) {
+      printButton.disabled = false;
+      window.print();
+    }
+  });
+
+  window.addEventListener("afterprint", () => {
+    if (printButton) {
+      printButton.disabled = false;
+    }
+  });
 })();
