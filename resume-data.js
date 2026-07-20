@@ -5,7 +5,7 @@ window.RESUME_DATA = {
     email: "aweilinzhen@gmail.com",
     status: "已离职（随时到岗）",
     targetRole: "AI产品经理",
-    avatar: "assets/profile.jpg"
+    avatar: "assets/profile.png"
   },
 
   summary: [
