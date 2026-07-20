@@ -205,7 +205,7 @@
       )}
 
       ${section(
-        "项目经历",
+        "代表项目",
         projectsHtml
       )}
 
