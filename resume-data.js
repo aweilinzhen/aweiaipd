@@ -1,9 +1,9 @@
 window.RESUME_DATA = {
   profile: {
     name: "林镇伟",
+    gender: "男",
     phone: "156-2613-0517",
     email: "aweilinzhen@gmail.com",
-    gender: "男",
     status: "已离职（随时到岗）",
     targetRole: "AI产品经理",
     avatar: "assets/profile.jpg"
