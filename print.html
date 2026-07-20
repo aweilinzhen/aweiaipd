@@ -1,41 +1,73 @@
 <!doctype html>
 <html lang="zh-CN">
+
 <head>
+
   <meta charset="UTF-8" />
+
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0"
   />
-  <title>林镇伟｜AI产品经理简历｜打印</title>
+
+  <title>
+    林镇伟｜AI产品经理简历｜打印
+  </title>
+
+
+  <!--
+    更新版本号。
+
+    避免 Chrome / GitHub Pages
+    继续使用旧的 print.css。
+  -->
 
   <link
     rel="stylesheet"
-    href="print.css?v=20260721-print-canvas-v3"
+    href="print.css?v=20260721-print-spacious-v5"
   />
+
 </head>
 
+
 <body>
-  <!--
-    #captureSource：临时 DOM，只用于生成 Canvas。
-    生成完成后会被隐藏，不参与最终打印。
-  -->
+
+
+  <!-- ======================================================
+       Canvas 截图源
+
+       这里是真实 DOM。
+
+       它只负责：
+       HTML → Canvas
+
+       最终不会直接交给 Chrome 打印。
+  ======================================================= -->
+
   <main
     id="captureSource"
     class="resume"
     aria-label="简历高清转换源"
   ></main>
 
-  <!--
-    #printOutput：最终打印内容。
-    每一页都是一张 210mm × 297mm 的高清图片，
-    用来绕开 Chrome 对 DOM 文字的打印渲染异常。
-  -->
+
+  <!-- ======================================================
+       最终打印内容
+
+       print.js 会把两页 DOM 分别生成高清 PNG。
+
+       Chrome / Safari 最终只打印这两张图片。
+  ======================================================= -->
+
   <main
     id="printOutput"
     class="print-output"
     aria-label="打印简历"
     hidden
   ></main>
+
+
+  <!-- 生成状态 -->
 
   <div
     id="printStatus"
@@ -45,22 +77,40 @@
     正在生成高清打印页，请稍候…
   </div>
 
+
+  <!-- 错误提示 -->
+
   <div
     id="printError"
     class="print-error"
     hidden
   ></div>
 
-  <!--
-    html2canvas 只负责把当前浏览器已经正常显示的 DOM 转成 Canvas。
-    Chrome 最终打印的是图片，不再直接打印文字 DOM。
-  -->
+
+  <!-- ======================================================
+       html2canvas
+
+       负责把当前浏览器已正常渲染的 DOM
+       转成高清 Canvas。
+
+       Chrome 最终打印图片，
+       避开之前文字消失的问题。
+  ======================================================= -->
+
   <script
     src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"
   ></script>
 
+
+  <!--
+    print.js 本身逻辑不需要修改。
+  -->
+
   <script
     src="print.js?v=20260721-print-canvas-v3"
   ></script>
+
+
 </body>
+
 </html>
