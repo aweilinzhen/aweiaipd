@@ -318,14 +318,6 @@
             <span>
               ${
                 esc(
-                  data.profile.status
-                )
-              }
-            </span>
-
-            <span>
-              ${
-                esc(
                   data.profile.targetRole
                 )
               }
