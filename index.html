@@ -1,20 +1,92 @@
 <!doctype html>
 <html lang="zh-CN">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="林镇伟 - AI产品经理个人简历" />
-  <title>林镇伟｜AI产品经理简历</title>
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-lz-32.png" />
-  <link rel="stylesheet" href="style.css" />
-  <script defer src="resume-data.js"></script>
-  <script defer src="app.js"></script>
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <meta
+    name="description"
+    content="林镇伟 - AI产品经理个人简历"
+  />
+
+  <title>
+    林镇伟｜AI产品经理简历
+  </title>
+
+  <link
+    rel="icon"
+    type="image/png"
+    sizes="32x32"
+    href="assets/favicon-lz-32.png"
+  />
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  />
+
+  <script
+    defer
+    src="resume-data.js"
+  ></script>
+
+  <script
+    defer
+    src="app.js"
+  ></script>
 </head>
+
 <body>
-  <div class="page-actions" aria-label="页面操作">
-    <button id="printButton" class="print-button" type="button">打印 / 保存 PDF</button>
+
+  <!--
+    PC 端页面操作
+
+    下载：
+    直接下载仓库根目录 resume.pdf
+
+    打印：
+    由 app.js 监听 #printButton
+    调用浏览器打印功能
+  -->
+
+  <div
+    class="page-actions"
+    aria-label="简历操作"
+  >
+
+    <a
+      class="action-button download-button"
+      href="resume.pdf"
+      download="林镇伟-AI产品经理简历.pdf"
+      aria-label="下载简历PDF"
+    >
+      下载
+    </a>
+
+    <button
+      id="printButton"
+      class="action-button print-button"
+      type="button"
+      aria-label="打印简历"
+    >
+      打印
+    </button>
+
   </div>
 
-  <main id="resume" class="resume" aria-label="林镇伟AI产品经理简历"></main>
+  <!-- 简历主体 -->
+
+  <main
+    id="resume"
+    class="resume"
+    aria-label="林镇伟AI产品经理简历"
+  ></main>
+
 </body>
+
 </html>
