@@ -11,6 +11,9 @@
       "#printError"
     );
 
+  const PRINT_STORAGE_PREFIX =
+    "resume-print-snapshot:";
+
   const fail = (message) => {
     if (root) {
       root.hidden = true;
@@ -22,21 +25,86 @@
     }
   };
 
-  /*
-    print.html 与主页面同源，
-    因此可以安全读取 opener 中已经渲染好的 #resume。
-
-    这样打印内容永远和屏幕当前看到的简历一致，
-    不需要再复制一套 RESUME_DATA 渲染逻辑。
-  */
-  const sourceResume =
-    window.opener
-      ?.document
-      ?.querySelector(
-        "#resume"
+  const getSnapshotHtml = () => {
+    const params =
+      new URLSearchParams(
+        window.location.search
       );
 
-  if (!sourceResume) {
+    const token =
+      params.get("token");
+
+    /*
+      首选：读取主页面在打开打印页前写入的临时快照。
+      读取后立即删除，避免简历 HTML 长期留在 localStorage。
+    */
+    if (token) {
+      const storageKey =
+        `${PRINT_STORAGE_PREFIX}${token}`;
+
+      try {
+        const raw =
+          localStorage.getItem(
+            storageKey
+          );
+
+        if (raw) {
+          localStorage.removeItem(
+            storageKey
+          );
+
+          const payload =
+            JSON.parse(raw);
+
+          if (
+            payload &&
+            typeof payload.html === "string" &&
+            payload.html.trim()
+          ) {
+            return payload.html;
+          }
+        }
+      } catch (error) {
+        console.warn(
+          "读取打印快照失败，将尝试 opener 兜底：",
+          error
+        );
+      }
+    }
+
+    /*
+      兜底：同源情况下仍可从 opener 读取当前已渲染 DOM。
+      这保证 localStorage 被禁用时还有一次恢复机会。
+    */
+    try {
+      const sourceResume =
+        window.opener
+          ?.document
+          ?.querySelector(
+            "#resume"
+          );
+
+      if (sourceResume) {
+        return sourceResume.innerHTML;
+      }
+    } catch (error) {
+      console.warn(
+        "无法从 opener 读取简历：",
+        error
+      );
+    }
+
+    return "";
+  };
+
+  if (!root) {
+    return;
+  }
+
+  const snapshotHtml =
+    getSnapshotHtml();
+
+  if (!snapshotHtml) {
     fail(
       "无法读取简历内容。请关闭此页面，回到简历主页后重新点击“打印 / 保存 PDF”。"
     );
@@ -44,7 +112,7 @@
   }
 
   root.innerHTML =
-    sourceResume.innerHTML;
+    snapshotHtml;
 
   /*
     PC 连续长页模式下隐藏的“工作经历（续）”
@@ -65,7 +133,7 @@
   const waitForImages = async () => {
     const images =
       Array.from(
-        document.images
+        root.querySelectorAll("img")
       );
 
     await Promise.all(
@@ -74,15 +142,18 @@
           if (!image.complete) {
             await new Promise(
               (resolve) => {
+                const done = () =>
+                  resolve();
+
                 image.addEventListener(
                   "load",
-                  resolve,
+                  done,
                   { once: true }
                 );
 
                 image.addEventListener(
                   "error",
-                  resolve,
+                  done,
                   { once: true }
                 );
               }
@@ -90,13 +161,14 @@
           }
 
           if (
-            typeof image.decode
-            === "function"
+            image.complete &&
+            image.naturalWidth > 0 &&
+            typeof image.decode === "function"
           ) {
             try {
               await image.decode();
             } catch (_) {
-              // 图片已可用时，decode 失败不阻断打印。
+              // decode 失败不阻断打印。
             }
           }
         }
@@ -117,11 +189,39 @@
       }
     );
 
+  const checkPageOverflow = () => {
+    const pages =
+      Array.from(
+        root.querySelectorAll(
+          ".resume-page"
+        )
+      );
+
+    const overflowPages =
+      pages
+        .map((page, index) => ({
+          page: index + 1,
+          overflow:
+            page.scrollHeight -
+            page.clientHeight
+        }))
+        .filter(
+          (item) =>
+            item.overflow > 2
+        );
+
+    if (overflowPages.length) {
+      console.warn(
+        "检测到打印页内容可能溢出：",
+        overflowPages
+      );
+    }
+  };
+
   const startPrint = async () => {
     try {
       if (
-        document.fonts
-        &&
+        document.fonts &&
         document.fonts.ready
       ) {
         await document.fonts.ready;
@@ -129,22 +229,20 @@
 
       await waitForImages();
 
-      /*
-        强制浏览器完成一次布局，
-        再等待两帧绘制。
-      */
       void document.body.offsetHeight;
       await waitForPaint();
 
+      checkPageOverflow();
+
       /*
-        给 Chrome 少量稳定时间，
-        避免打印预览抓到尚未完成文字绘制的帧。
+        给 Chrome 一次稳定布局/绘制机会，
+        避免打印预览抓到尚未完成文字栅格化的帧。
       */
       await new Promise(
         (resolve) =>
-          setTimeout(
+          window.setTimeout(
             resolve,
-            180
+            250
           )
       );
 
@@ -165,11 +263,7 @@
   window.addEventListener(
     "afterprint",
     () => {
-      /*
-        打印窗口关闭后自动关闭本打印页。
-        若浏览器不允许自动关闭，用户可手动关闭。
-      */
-      setTimeout(
+      window.setTimeout(
         () => {
           window.close();
         },
