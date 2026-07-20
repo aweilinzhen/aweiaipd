@@ -10,12 +10,10 @@
   --text: #151515;
   --muted: #3f3f3f;
   --line: #262626;
-
-  --screen-gap: 24px;
 }
 
 /* =========================
-   基础设置
+   基础
 ========================= */
 
 *,
@@ -49,43 +47,70 @@ body {
 }
 
 /* =========================
-   简历整体
+   PC：连续长页
 ========================= */
 
 .resume {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  gap: var(--screen-gap);
-
-  padding: 24px 16px 40px;
-}
-
-/* =========================
-   默认 A4 页面
-========================= */
-
-.resume-page {
   width: min(
     var(--paper-width),
     calc(100vw - 32px)
   );
 
-  height: var(--paper-height);
+  margin:
+    24px
+    auto
+    40px;
+
+  padding: 0;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 4px 22px
+    rgb(0 0 0 / 14%);
+}
+
+/*
+  屏幕浏览时不限制 A4 高度。
+
+  page-one 与 page-two
+  仍然保留两个 DOM 容器，
+  只是视觉上连接成一张完整长页。
+
+  打印时会重新恢复成两页 A4。
+*/
+
+.resume-page {
+  width: 100%;
+
+  height: auto;
+  min-height: 0;
 
   padding:
     14mm
     15mm
     12mm;
 
-  overflow: hidden;
+  overflow: visible;
 
   background: var(--paper-bg);
+}
 
-  box-shadow:
-    0 4px 22px
-    rgb(0 0 0 / 14%);
+/*
+  第一页底部不保留完整 A4 下边距，
+  避免“工作经历”和“项目经历”之间产生大块空白。
+*/
+
+.page-one {
+  padding-bottom: 0;
+}
+
+/*
+  第二部分只保留正常模块间距。
+*/
+
+.page-two {
+  padding-top: 4.5mm;
 }
 
 /* =========================
@@ -106,6 +131,7 @@ body {
 
 .profile-main {
   min-width: 0;
+
   padding-top: 0.5mm;
 }
 
@@ -133,8 +159,6 @@ body {
   flex-wrap: wrap;
   align-items: center;
 
-  gap: 0;
-
   margin: 0;
 
   font-size: 11.4px;
@@ -144,13 +168,19 @@ body {
 }
 
 /*
-  只在第2个及后续项目前添加分隔符。
-  避免首项前出现多余的“丨”。
+  只在第二个及后续字段之前增加分隔符。
+
+  正确：
+  手机号 丨 邮箱
+
+  不会出现：
+  丨 手机号 丨 邮箱
 */
 
 .contact-line span + span::before,
 .status-line span + span::before {
   content: " 丨 ";
+
   color: #555;
 }
 
@@ -224,7 +254,8 @@ body {
 }
 
 /* =========================
-   工作经历 / 项目经历 / 教育经历
+   工作经历 / 项目经历 /
+   教育经历
 ========================= */
 
 .entry {
@@ -232,9 +263,6 @@ body {
     0
     0
     3.2mm;
-
-  break-inside: avoid;
-  page-break-inside: avoid;
 }
 
 .entry:last-child {
@@ -300,9 +328,9 @@ body {
   margin-bottom: 0.9mm;
 }
 
-/* =========================
-   打印按钮
-========================= */
+/* =========================================================
+   PC 右上角操作按钮
+========================================================= */
 
 .page-actions {
   position: fixed;
@@ -311,20 +339,27 @@ body {
   right: 24px;
 
   z-index: 30;
+
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
 }
 
-.print-button {
-  min-height: 42px;
+/* 两个按钮公共样式 */
+
+.action-button {
+  height: 42px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
   padding:
     0
-    16px;
+    18px;
 
-  border: 0;
   border-radius: 9px;
-
-  background: #111;
-  color: #fff;
 
   font:
     600
@@ -334,132 +369,114 @@ body {
     Arial,
     sans-serif;
 
+  text-decoration: none;
+
+  cursor: pointer;
+
+  user-select: none;
+
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+/* =========================
+   下载按钮
+========================= */
+
+.download-button {
+  border:
+    1px solid
+    #d0d0d0;
+
+  background:
+    #ffffff;
+
+  color:
+    #222222;
+
+  box-shadow:
+    0 4px 14px
+    rgb(0 0 0 / 10%);
+}
+
+.download-button:hover {
+  background:
+    #f5f5f5;
+
+  border-color:
+    #b8b8b8;
+}
+
+/* =========================
+   打印按钮
+========================= */
+
+.print-button {
+  border:
+    1px solid
+    #111111;
+
+  background:
+    #111111;
+
+  color:
+    #ffffff;
+
   box-shadow:
     0 6px 18px
     rgb(0 0 0 / 18%);
-
-  cursor: pointer;
 }
 
 .print-button:hover {
-  background: #2b2b2b;
+  background:
+    #2b2b2b;
+
+  border-color:
+    #2b2b2b;
 }
 
 .print-button:disabled {
   opacity: 0.65;
+
   cursor: wait;
 }
 
-/* =========================================================
-   PC 浏览模式
-   两个 resume-page 在视觉上合并成一张连续长页
-========================================================= */
+/* 点击反馈 */
 
-@media screen and (min-width: 721px) {
-
-  .resume {
-    display: block;
-
-    width: min(
-      var(--paper-width),
-      calc(100vw - 32px)
-    );
-
-    margin:
-      24px
-      auto
-      40px;
-
-    padding: 0;
-
-    background: #fff;
-
-    box-shadow:
-      0 4px 22px
-      rgb(0 0 0 / 14%);
-  }
-
-  .resume-page {
-    width: 100%;
-
-    /*
-      PC 浏览时取消 A4 固定高度。
-      内容根据实际长度自然撑开。
-    */
-    height: auto;
-    min-height: 0;
-
-    margin: 0;
-
-    overflow: visible;
-
-    background: #fff;
-
-    box-shadow: none;
-  }
-
-  /*
-    第一页底部不再保留完整 A4 下边距，
-    避免工作经历和项目经历之间出现过大空白。
-  */
-
-  .page-one {
-    padding-bottom: 0;
-  }
-
-  /*
-    第二页在 PC 端只是上一部分内容的延续，
-    仅保留正常模块级间距。
-  */
-
-  .page-two {
-    padding-top: 4.5mm;
-  }
+.action-button:active {
+  transform:
+    translateY(1px);
 }
 
-/* =========================
+/* =========================================================
    手机端
-========================= */
+========================================================= */
 
 @media screen and (max-width: 720px) {
 
-  :root {
-    --screen-gap: 14px;
-  }
-
   .resume {
-    padding:
-      12px
-      8px
-      24px;
-  }
-
-  /*
-    手机端也取消固定 A4 高度，
-    避免出现大量空白区域。
-  */
-
-  .resume-page {
     width:
       calc(100vw - 16px);
 
-    height: auto;
-    min-height: 0;
-
-    padding:
-      7vw
-      6.2vw;
-
-    overflow: visible;
+    margin:
+      12px
+      auto
+      24px;
 
     box-shadow:
       0 2px 14px
       rgb(0 0 0 / 12%);
   }
 
-  /*
-    手机端视觉上同样连续显示。
-  */
+  .resume-page {
+    padding:
+      7vw
+      6.2vw;
+  }
 
   .page-one {
     padding-bottom: 0;
@@ -468,6 +485,10 @@ body {
   .page-two {
     padding-top: 5vw;
   }
+
+  /*
+    手机端隐藏下载、打印。
+  */
 
   .page-actions {
     display: none;
@@ -532,11 +553,12 @@ body {
 }
 
 /* =========================================================
-   打印设置
+   打印
 ========================================================= */
 
 @page {
   size: A4 portrait;
+
   margin: 0;
 }
 
@@ -544,17 +566,33 @@ body {
 
   html,
   body {
-    margin: 0 !important;
-    padding: 0 !important;
+    width:
+      var(--paper-width)
+      !important;
 
-    width: auto !important;
+    height:
+      auto
+      !important;
 
-    height: auto !important;
-    min-height: 0 !important;
+    min-height:
+      0
+      !important;
 
-    background: #fff !important;
+    margin:
+      0
+      !important;
 
-    overflow: visible !important;
+    padding:
+      0
+      !important;
+
+    background:
+      #ffffff
+      !important;
+
+    overflow:
+      visible
+      !important;
   }
 
   body {
@@ -567,28 +605,108 @@ body {
       !important;
   }
 
-  /* 隐藏打印按钮 */
+  /*
+    打印时：
+    下载 / 打印按钮全部隐藏。
+  */
 
   .page-actions {
-    display: none !important;
+    display:
+      none
+      !important;
+  }
+
+  /*
+    显式保证打印文字可见。
+
+    解决部分 Chrome 打印动态 DOM 时：
+    - 列表圆点出现
+    - 横线出现
+    - 头像出现
+    - 正文却不显示
+  */
+
+  body,
+  .resume,
+  .resume-page,
+  .profile-header,
+  .profile-main,
+  .profile-main h1,
+  .contact-line,
+  .contact-line span,
+  .status-line,
+  .status-line span,
+  .resume-section,
+  .section-title,
+  .entry,
+  .entry-heading,
+  .entry-heading h3,
+  .entry-heading time,
+  .entry-subtitle,
+  .bullet-list,
+  .bullet-list li {
+    visibility:
+      visible
+      !important;
+
+    opacity:
+      1
+      !important;
+
+    color:
+      #151515
+      !important;
+
+    -webkit-text-fill-color:
+      #151515
+      !important;
+  }
+
+  .entry-heading time,
+  .entry-subtitle {
+    color:
+      #333333
+      !important;
+
+    -webkit-text-fill-color:
+      #333333
+      !important;
+  }
+
+  .contact-line span + span::before,
+  .status-line span + span::before {
+    color:
+      #555555
+      !important;
+
+    -webkit-text-fill-color:
+      #555555
+      !important;
   }
 
   /* =========================
-     打印容器
+     打印主体
   ========================= */
 
   .resume {
-    display: block !important;
+    display:
+      block
+      !important;
 
     width:
       var(--paper-width)
       !important;
 
-    margin: 0 !important;
-    padding: 0 !important;
+    margin:
+      0
+      !important;
+
+    padding:
+      0
+      !important;
 
     background:
-      #fff
+      #ffffff
       !important;
 
     box-shadow:
@@ -597,20 +715,22 @@ body {
   }
 
   /*
-    打印时重新恢复为两张标准 A4 页面。
+    打印时重新恢复成两张 A4。
 
-    使用 296mm 而不是刚好 297mm，
-    给 Chrome / Edge / Safari 的 mm→px
-    换算留下约 1mm 的安全余量。
+    使用 296mm 而不是正好 297mm，
+    给 Chrome / Edge / Safari
+    的毫米转像素计算留约 1mm 容差。
 
-    避免：
-    - 多出第3张空白页
-    - 第二页底部被裁切
-    - 浏览器自动缩放
+    主要防止：
+    - 多出第3页
+    - 第二页底部裁切
+    - 浏览器强制缩放
   */
 
   .resume-page {
-    display: block !important;
+    display:
+      block
+      !important;
 
     width:
       var(--paper-width)
@@ -643,17 +763,12 @@ body {
       !important;
 
     background:
-      #fff
+      #ffffff
       !important;
 
     box-shadow:
       none
       !important;
-
-    /*
-      不对整页设置 avoid。
-      否则可能和强制分页规则冲突。
-    */
 
     break-inside:
       auto
@@ -673,13 +788,23 @@ body {
   }
 
   /*
-    第一页结束后强制分页。
+    PC浏览时 page-one / page-two
+    为了连续展示修改了 padding。
 
-    结构：
+    打印时统一恢复标准 A4 padding。
+  */
 
-    第1页
-    ───────
-    第2页
+  .page-one,
+  .page-two {
+    padding:
+      14mm
+      15mm
+      12mm
+      !important;
+  }
+
+  /*
+    第一页结束后强制换页。
   */
 
   .resume-page:first-child {
@@ -693,7 +818,7 @@ body {
   }
 
   /*
-    最后一页不再继续分页。
+    最后一页不再产生后续空白页。
   */
 
   .resume-page:last-child {
@@ -707,8 +832,7 @@ body {
   }
 
   /*
-    单条工作经历 / 项目经历
-    尽量不要跨页拆分。
+    单条经历尽量不要拆开。
   */
 
   .entry {
@@ -722,8 +846,7 @@ body {
   }
 
   /*
-    打印时禁用动画与过渡，
-    避免浏览器捕捉到中间状态。
+    禁用动画和过渡。
   */
 
   *,
