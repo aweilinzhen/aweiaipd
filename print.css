@@ -1,0 +1,322 @@
+@page {
+  size: A4 portrait;
+  margin: 0;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+
+  background: #ffffff;
+  color: #151515;
+
+  font-family:
+    "PingFang SC",
+    "Microsoft YaHei",
+    "Noto Sans CJK SC",
+    Arial,
+    sans-serif;
+
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+body {
+  width: 210mm;
+}
+
+/* =========================
+   两页 A4
+========================= */
+
+.resume {
+  display: block;
+
+  width: 210mm;
+
+  margin: 0;
+  padding: 0;
+
+  background: #ffffff;
+}
+
+.resume-page {
+  display: block;
+
+  width: 210mm;
+  height: 296mm;
+
+  margin: 0;
+
+  padding:
+    11mm
+    15mm
+    10mm;
+
+  overflow: hidden;
+
+  background: #ffffff;
+
+  page-break-after: always;
+  break-after: page;
+}
+
+.resume-page:last-child {
+  page-break-after: auto;
+  break-after: auto;
+}
+
+.page-one,
+.page-two {
+  padding:
+    11mm
+    15mm
+    10mm;
+}
+
+/* =========================
+   顶部
+========================= */
+
+.profile-header {
+  min-height: 28mm;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 18px;
+
+  margin-bottom: 3mm;
+}
+
+.profile-main {
+  min-width: 0;
+  padding-top: 0.5mm;
+}
+
+.profile-main h1 {
+  margin: 0 0 1.3mm;
+
+  font-size: 24px;
+  line-height: 1.1;
+
+  font-weight: 700;
+
+  color: #151515;
+  -webkit-text-fill-color: #151515;
+}
+
+.contact-line,
+.status-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+
+  margin: 0;
+
+  font-size: 11.1px;
+  line-height: 1.5;
+
+  color: #222222;
+  -webkit-text-fill-color: #222222;
+}
+
+.contact-line span + span::before,
+.status-line span + span::before {
+  content: " 丨 ";
+
+  color: #555555;
+  -webkit-text-fill-color: #555555;
+}
+
+.profile-photo {
+  width: 21mm;
+  height: 27mm;
+
+  object-fit: cover;
+  object-position: center 20%;
+
+  flex: 0 0 auto;
+}
+
+/* =========================
+   模块
+========================= */
+
+.resume-section + .resume-section {
+  margin-top: 3.2mm;
+}
+
+.section-title {
+  margin: 0 0 2mm;
+  padding: 0 0 1.1mm;
+
+  border-bottom:
+    1.6px solid
+    #262626;
+
+  font-size: 19px;
+  line-height: 1.05;
+
+  font-weight: 700;
+
+  color: #151515;
+  -webkit-text-fill-color: #151515;
+}
+
+/* =========================
+   列表
+========================= */
+
+.bullet-list {
+  margin: 0;
+  padding-left: 5.1mm;
+
+  font-size: 10.9px;
+  line-height: 1.45;
+
+  color: #151515;
+  -webkit-text-fill-color: #151515;
+}
+
+.bullet-list li {
+  margin: 0 0 0.8mm;
+  padding-left: 0.5mm;
+
+  color: #151515;
+  -webkit-text-fill-color: #151515;
+}
+
+.bullet-list li:last-child {
+  margin-bottom: 0;
+}
+
+/* =========================
+   经历
+========================= */
+
+.entry {
+  margin: 0 0 2.2mm;
+
+  page-break-inside: avoid;
+  break-inside: avoid-page;
+}
+
+.entry:last-child {
+  margin-bottom: 0;
+}
+
+.entry-heading {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    auto;
+
+  align-items: baseline;
+
+  gap: 10mm;
+
+  margin-bottom: 0.5mm;
+}
+
+.entry-heading h3 {
+  margin: 0;
+
+  font-size: 13.8px;
+  line-height: 1.3;
+
+  font-weight: 700;
+
+  color: #151515;
+  -webkit-text-fill-color: #151515;
+}
+
+.entry-heading time {
+  white-space: nowrap;
+
+  font-size: 10.8px;
+  line-height: 1.3;
+
+  color: #3f3f3f;
+  -webkit-text-fill-color: #3f3f3f;
+}
+
+.entry-subtitle {
+  margin: 0 0 0.7mm;
+
+  font-size: 10.8px;
+  line-height: 1.4;
+
+  color: #333333;
+  -webkit-text-fill-color: #333333;
+}
+
+.entry .bullet-list {
+  font-size: 10.7px;
+  line-height: 1.42;
+}
+
+.entry .bullet-list li {
+  margin-bottom: 0.55mm;
+}
+
+.entry .bullet-list li:last-child {
+  margin-bottom: 0;
+}
+
+/* 打印页必须显示续页标题 */
+.screen-only-hidden-title {
+  display: block !important;
+}
+
+/* =========================
+   打印页错误信息
+========================= */
+
+.print-error {
+  margin: 40px;
+
+  font-size: 16px;
+  line-height: 1.6;
+
+  color: #b42318;
+}
+
+/* =========================
+   屏幕预览
+========================= */
+
+@media screen {
+  body {
+    background: #e8e8e8;
+  }
+
+  .resume-page {
+    margin: 18px auto;
+
+    box-shadow:
+      0 2px 14px
+      rgb(0 0 0 / 15%);
+  }
+}
+
+@media print {
+  body {
+    background: #ffffff;
+  }
+
+  .resume-page {
+    margin: 0;
+
+    box-shadow: none;
+  }
+}

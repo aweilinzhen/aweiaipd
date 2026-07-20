@@ -205,7 +205,7 @@
       )}
 
       ${section(
-        "代表项目",
+        "项目经历",
         projectsHtml
       )}
 
@@ -236,435 +236,20 @@
   }
 
   /* =========================================================
-     独立 iframe 打印
+     打印：使用独立顶层页面
+
+     不再使用：
+     - window.print() 直接打印当前页
+     - 1px / opacity:0 的隐藏 iframe
+
+     原因：
+     Chrome 在隐藏 iframe / 动态 DOM 场景下可能出现
+     “头像、横线、项目符号正常，但正文文字不绘制”的问题。
+
+     新方案：
+     点击打印 → 打开同源 print.html → 复制当前已渲染的简历 DOM
+     → 使用独立 A4 CSS → 等待字体/图片 → 调用打印。
   ========================================================= */
-
-  const PRINT_CSS = `
-    @page {
-      size: A4 portrait;
-      margin: 0;
-    }
-
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-    }
-
-    html,
-    body {
-      margin: 0;
-      padding: 0;
-
-      background: #ffffff;
-      color: #151515;
-
-      font-family:
-        "PingFang SC",
-        "Microsoft YaHei",
-        "Noto Sans CJK SC",
-        Arial,
-        sans-serif;
-
-      -webkit-print-color-adjust: exact;
-      print-color-adjust: exact;
-    }
-
-    .resume {
-      display: block;
-      width: 210mm;
-
-      margin: 0;
-      padding: 0;
-
-      background: #ffffff;
-    }
-
-    .resume-page {
-      display: block;
-
-      width: 210mm;
-      height: 296mm;
-
-      margin: 0;
-
-      padding:
-        11mm
-        15mm
-        10mm;
-
-      overflow: hidden;
-
-      background: #ffffff;
-
-      page-break-after: always;
-      break-after: page;
-    }
-
-    .resume-page:last-child {
-      page-break-after: auto;
-      break-after: auto;
-    }
-
-    .page-one,
-    .page-two {
-      padding:
-        11mm
-        15mm
-        10mm;
-    }
-
-    .profile-header {
-      min-height: 28mm;
-
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-
-      gap: 18px;
-
-      margin-bottom: 3mm;
-    }
-
-    .profile-main {
-      min-width: 0;
-      padding-top: 0.5mm;
-    }
-
-    .profile-main h1 {
-      margin: 0 0 1.3mm;
-
-      font-size: 24px;
-      line-height: 1.1;
-
-      font-weight: 700;
-    }
-
-    .contact-line,
-    .status-line {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-
-      margin: 0;
-
-      font-size: 11.1px;
-      line-height: 1.5;
-
-      color: #222222;
-    }
-
-    .contact-line span + span::before {
-      content: " 丨 ";
-      color: #555555;
-    }
-
-    .profile-photo {
-      width: 21mm;
-      height: 27mm;
-
-      object-fit: cover;
-      object-position: center 20%;
-
-      flex: 0 0 auto;
-    }
-
-    .resume-section + .resume-section {
-      margin-top: 3.2mm;
-    }
-
-    .section-title {
-      margin: 0 0 2mm;
-      padding: 0 0 1.1mm;
-
-      border-bottom:
-        1.6px solid
-        #262626;
-
-      font-size: 19px;
-      line-height: 1.05;
-
-      font-weight: 700;
-    }
-
-    .bullet-list {
-      margin: 0;
-      padding-left: 5.1mm;
-
-      font-size: 10.9px;
-      line-height: 1.45;
-    }
-
-    .bullet-list li {
-      margin: 0 0 0.8mm;
-      padding-left: 0.5mm;
-    }
-
-    .bullet-list li:last-child {
-      margin-bottom: 0;
-    }
-
-    .entry {
-      margin: 0 0 2.2mm;
-
-      page-break-inside: avoid;
-      break-inside: avoid-page;
-    }
-
-    .entry:last-child {
-      margin-bottom: 0;
-    }
-
-    .entry-heading {
-      display: grid;
-
-      grid-template-columns:
-        minmax(0, 1fr)
-        auto;
-
-      align-items: baseline;
-
-      gap: 10mm;
-
-      margin-bottom: 0.5mm;
-    }
-
-    .entry-heading h3 {
-      margin: 0;
-
-      font-size: 13.8px;
-      line-height: 1.3;
-
-      font-weight: 700;
-    }
-
-    .entry-heading time {
-      white-space: nowrap;
-
-      font-size: 10.8px;
-      line-height: 1.3;
-
-      color: #3f3f3f;
-    }
-
-    .entry-subtitle {
-      margin: 0 0 0.7mm;
-
-      font-size: 10.8px;
-      line-height: 1.4;
-
-      color: #333333;
-    }
-
-    .entry .bullet-list {
-      font-size: 10.7px;
-      line-height: 1.42;
-    }
-
-    .entry .bullet-list li {
-      margin-bottom: 0.55mm;
-    }
-
-    .screen-only-hidden-title {
-      display: block !important;
-    }
-  `;
-
-  async function waitForImages(doc) {
-    const images =
-      Array.from(doc.images);
-
-    await Promise.all(
-      images.map(
-        async (image) => {
-
-          if (!image.complete) {
-            await new Promise(
-              (resolve) => {
-                image.addEventListener(
-                  "load",
-                  resolve,
-                  { once: true }
-                );
-
-                image.addEventListener(
-                  "error",
-                  resolve,
-                  { once: true }
-                );
-              }
-            );
-          }
-
-          if (
-            typeof image.decode
-            === "function"
-          ) {
-            try {
-              await image.decode();
-            } catch (_) {}
-          }
-        }
-      )
-    );
-  }
-
-  async function printResume() {
-
-    const iframe =
-      document.createElement(
-        "iframe"
-      );
-
-    iframe.setAttribute(
-      "aria-hidden",
-      "true"
-    );
-
-    iframe.style.position =
-      "fixed";
-
-    iframe.style.right =
-      "0";
-
-    iframe.style.bottom =
-      "0";
-
-    iframe.style.width =
-      "1px";
-
-    iframe.style.height =
-      "1px";
-
-    iframe.style.border =
-      "0";
-
-    iframe.style.opacity =
-      "0";
-
-    iframe.style.pointerEvents =
-      "none";
-
-    document.body.appendChild(
-      iframe
-    );
-
-    const printWindow =
-      iframe.contentWindow;
-
-    const printDocument =
-      iframe.contentDocument
-      ||
-      printWindow.document;
-
-    printDocument.open();
-
-    printDocument.write(`
-      <!doctype html>
-
-      <html lang="zh-CN">
-
-      <head>
-
-        <meta charset="UTF-8" />
-
-        <base
-          href="${esc(document.baseURI)}"
-        />
-
-        <title>
-          林镇伟｜AI产品经理简历
-        </title>
-
-        <style>
-          ${PRINT_CSS}
-        </style>
-
-      </head>
-
-      <body>
-
-        <main class="resume">
-          ${resume.innerHTML}
-        </main>
-
-      </body>
-
-      </html>
-    `);
-
-    printDocument.close();
-
-    try {
-      if (
-        printDocument.fonts
-        &&
-        printDocument.fonts.ready
-      ) {
-        await printDocument.fonts.ready;
-      }
-    } catch (_) {}
-
-    await waitForImages(
-      printDocument
-    );
-
-    void printDocument.body.offsetHeight;
-
-    await new Promise(
-      (resolve) =>
-        printWindow.requestAnimationFrame(
-          () =>
-            printWindow.requestAnimationFrame(
-              resolve
-            )
-        )
-    );
-
-    await new Promise(
-      (resolve) =>
-        setTimeout(
-          resolve,
-          100
-        )
-    );
-
-    printWindow.focus();
-    printWindow.print();
-
-    const cleanup = () => {
-      setTimeout(
-        () => {
-          if (iframe.parentNode) {
-            iframe.parentNode.removeChild(
-              iframe
-            );
-          }
-        },
-        500
-      );
-    };
-
-    printWindow.addEventListener(
-      "afterprint",
-      cleanup,
-      {
-        once: true
-      }
-    );
-
-    setTimeout(
-      cleanup,
-      60000
-    );
-  }
-
-  /*
-    重要：
-    app.js 只监听已有 #printButton，
-    不创建下载按钮。
-    因此不会再出现两个“下载”。
-  */
 
   const printButton =
     document.querySelector(
@@ -672,40 +257,28 @@
     );
 
   if (printButton) {
-
     printButton.addEventListener(
       "click",
-      async () => {
-
-        if (
-          printButton.disabled
-        ) {
+      () => {
+        if (printButton.disabled) {
           return;
         }
 
-        printButton.disabled =
-          true;
-
-        try {
-
-          await printResume();
-
-        } catch (error) {
-
-          console.error(
-            "打印失败：",
-            error
+        /*
+          必须在用户点击事件里同步 window.open，
+          否则浏览器可能把它当成弹窗拦截。
+        */
+        const printWindow =
+          window.open(
+            `print.html?v=${Date.now()}`,
+            "_blank"
           );
 
+        if (!printWindow) {
           alert(
-            "打印初始化失败，请刷新页面后重试。"
+            "浏览器阻止了打印窗口，请允许本站弹出窗口后重试。"
           );
-
-        } finally {
-
-          printButton.disabled =
-            false;
-
+          return;
         }
       }
     );
