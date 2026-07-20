@@ -1,61 +1,59 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="794" height="1123" viewBox="0 0 794 1123">
-<rect width="100%" height="100%" fill="#ffffff"/>
-
+<rect width="100%" height="100%" fill="#fff"/>
 <style>
 text { font-family:"Noto Sans CJK SC","Microsoft YaHei","PingFang SC",Arial,sans-serif; fill:#111; }
 .sec { font-size:21px; font-weight:700; }
-.title { font-size:14.2px; font-weight:700; }
-.date { font-size:11.3px; font-weight:500; fill:#333; }
-.desc { font-size:10.8px; fill:#333; }
-.body { font-size:10.6px; fill:#222; }
+.title { font-size:14.4px; font-weight:700; }
+.date,.desc,.body { font-size:11.4px; fill:#222; }
+.date { fill:#333; }
+.desc { fill:#333; }
 </style>
-
 <text class="sec" x="58" y="56">项目经历</text>
 <line x1="58" y1="66" x2="736" y2="66" stroke="#111" stroke-width="1.7"/>
-<text class="title" x="58" y="87">AI 驱动的业务流程自动化（Text-to-Workflow）</text>
-<text class="date" x="736" y="87" text-anchor="end">2025.03 - 至今</text>
-<text class="desc" x="58" y="107">马来西亚国立大学人工智能硕士研究项目，基于 LLM、Prompt Engineering 与 AI Agent，研究将用户自然语言需求转换为结构化、可执行的自</text>
-<text class="desc" x="58" y="123">动化业务流程。</text>
-<text class="body" x="58" y="139">• 设计自然语言解析、Workflow IR 生成、BPMN 转换及自动执行的完整流程，通过 Prompt 设计、结构化输出和规则约束，让 LLM 识别任务、</text>
-<text class="body" x="76" y="154.5">条件及流程逻辑，并生成可执行工作流。</text>
-<text class="body" x="58" y="172.0">• 探索 AI Agent 与业务流程自动化的结合，完成从 AI 理解、流程生成、规则校验到 Camunda 执行的完整链路；构建 24 个业务流程测试用例，</text>
-<text class="body" x="76" y="187.5">覆盖顺序、条件分支、并行及多阶段等场景，端到端生成、部署与执行成功率 100%。</text>
-<text class="title" x="58" y="213.0">有信云 PaaS 低代码平台</text>
-<text class="date" x="736" y="213.0" text-anchor="end">2021.09 - 2025.01</text>
-<text class="desc" x="58" y="233.0">面向中大型企业的 PaaS 低代码平台，包含数据、审批流、自动化、界面和 DSL 领域语言等引擎。</text>
-<text class="body" x="58" y="249.0">• 负责平台核心引擎的逻辑规划与详细设计。 完成数据建模、页面布局、工作流（Workflow）、审批流及 API 编排等模块设计，保障平台底座</text>
-<text class="body" x="76" y="264.5">的灵活扩展性，有效降低定制开发成本。</text>
-<text class="body" x="58" y="282.0">• 主导大客户方案交付与跨系统集成。 针对宝洁、中消云设计定制方案，解决多业务线及复杂审批隔离难题；联合 Salesforce 金牌服务商蓝岭</text>
-<text class="body" x="76" y="297.5">科技，攻克平台与 ERP/CRM 等系统的接口集成与数据互通瓶颈。</text>
-<text class="title" x="58" y="323.0">道一云 七巧Plus低代码平台</text>
-<text class="date" x="736" y="323.0" text-anchor="end">2018.07 - 2019.08</text>
-<text class="desc" x="58" y="343.0">面向中小企业的 aPaaS 低代码平台，提供表单、工作流、报表、页面、低代码等引擎。</text>
-<text class="body" x="58" y="359.0">• 主导表单组件与复杂 BPMN 2.0 审批流引擎设计。 抽象设计 20+ 基础与关系组件，落地满足复杂分支和百级审批节点的审批流，在商业化前支</text>
-<text class="body" x="76" y="374.5">撑内部快速搭建并上架 10+ 行业应用。</text>
-<text class="body" x="58" y="392.0">• 负责多端配置页面引擎设计，成功推动产品商业化与技术沉淀。 设计移动与 PC 分端配置的页面引擎（10+组件），推动公有云商业化（注册</text>
-<text class="body" x="76" y="407.5">企业 8000+，现为公司战略级招牌产品）；提炼技术方案，协助申请 2 项低代码国家发明专利。</text>
-<text class="title" x="58" y="433.0">豌豆思维 统一监控平台</text>
-<text class="date" x="736" y="433.0" text-anchor="end">2021.03 - 2021.08</text>
-<text class="desc" x="58" y="453.0">面向豌豆思维内部的统一监控平台，提供多维度监控，助力研发和运营快速定位故障。</text>
-<text class="body" x="58" y="469.0">• 负责监控平台的核心指标规划、策略制定与多业务推广。 建立课堂与 Socket 稳定性指标，实现接入应用 380+、主机 1000+（覆盖率 90%）</text>
-<text class="body" x="76" y="484.5">；制定告警降噪方案，使告警信噪比提升 100%、问题定位时间缩短 50%+。</text>
-<text class="title" x="58" y="510.0">滴普 云原生与低代码平台</text>
-<text class="date" x="736" y="510.0" text-anchor="end">2019.09 - 2021.03</text>
-<text class="desc" x="58" y="530.0">滴普科技核心产品矩阵，包含前端可视化低代码平台、DevOps 平台及云容器平台。</text>
-<text class="body" x="58" y="546.0">• 主导前端低代码平台设计，支撑业务高效交付。 负责组件库与事件配置逻辑，提供前端组装、一站式构建部署能力，支持公司内部 20+ 项目</text>
-<text class="body" x="76" y="561.5">，助力标杆项目赢单。</text>
-<text class="body" x="58" y="579.0">• 负责容器平台（OpenKube）与 DevOps 平台（EDWard）的设计与重塑。 基于 Kubernetes 优化部署流程与资源隔离，在公司业务调整期，</text>
-<text class="body" x="76" y="594.5">成功将底层研发效能及集群管理能力进行重构与模块化复用。</text>
-<text class="sec" x="58" y="619.0">教育经历</text>
-<line x1="58" y1="629.0" x2="736" y2="629.0" stroke="#111" stroke-width="1.7"/>
-<text class="title" x="58" y="650.0">马来西亚国立大学 ｜ 人工智能（AI）硕士</text>
-<text class="date" x="736" y="650.0" text-anchor="end">2025.03 - 2026.11</text>
-<text class="body" x="58" y="669.0" style="font-size:10.3px">• 研究方向：专注于人工智能与自然语言驱动的业务流程自动化（Text-to-Workflow），研究如何将用户意图/自然语言智能转换为结构化、可执行</text>
-<text class="body" x="76" y="684.0" style="font-size:10.3px">的自动化业务流程。</text>
-<text class="body" x="58" y="700.5" style="font-size:10.3px">• 主修课程：机器学习、高级AI算法、自然语言处理（NLP）、数据挖掘等。</text>
-<text class="body" x="58" y="717.0" style="font-size:10.3px">• 培养模式：全英文授课（具备良好的英文专业文献阅读与技术文档理解能力）。</text>
-<text class="title" x="58" y="741.5">广州软件学院 ｜ 软件工程 本科</text>
-<text class="date" x="736" y="741.5" text-anchor="end">2014.08 - 2018.06</text>
-<text class="body" x="58" y="760.5" style="font-size:10.3px">• 奖项：优秀毕业生、优秀毕业生冠军奖、国家单项奖学金、广东省优秀共青团干部。</text>
-<text class="body" x="58" y="777.0" style="font-size:10.3px">• 实践：发现杯软件设计大赛全国二等奖、计算机设计大赛全国三等奖、蓝桥杯全国选拔赛二等奖。</text>
+<text class="title" x="58" y="88">AI 驱动的业务流程自动化（Text-to-Workflow）</text>
+<text class="date" x="736" y="88" text-anchor="end">2025.03 - 至今</text>
+<text class="desc" x="58" y="109">马来西亚国立大学人工智能硕士研究项目，基于 LLM、Prompt Engineering 与 AI Agent，研究将用户自然语言需求转换为结构化、可执行</text>
+<text class="desc" x="58" y="126.2">的自动化业务流程。</text>
+<text class="body" x="58" y="143.4">• 设计自然语言解析、Workflow IR 生成、BPMN 转换及自动执行的完整流程，通过 Prompt 设计、结构化输出和规则约束，让 LLM 识别</text>
+<text class="body" x="76" y="160.6">任务、条件及流程逻辑，并生成可执行工作流。</text>
+<text class="body" x="58" y="180.29999999999998">• 探索 AI Agent 与业务流程自动化的结合，完成从 AI 理解、流程生成、规则校验到 Camunda 执行的完整链路；构建 24 个业务流程测试</text>
+<text class="body" x="76" y="197.49999999999997">用例，覆盖顺序、条件分支、并行及多阶段等场景，端到端生成、部署与执行成功率 100%。</text>
+<text class="title" x="58" y="226.19999999999996">有信云 PaaS 低代码平台</text>
+<text class="date" x="736" y="226.19999999999996" text-anchor="end">2021.09 - 2025.01</text>
+<text class="desc" x="58" y="247.19999999999996">面向中大型企业的 PaaS 低代码平台，包含数据、审批流、自动化、界面和 DSL 领域语言等引擎。</text>
+<text class="body" x="58" y="264.4">• 负责平台核心引擎的逻辑规划与详细设计。 完成数据建模、页面布局、工作流（Workflow）、审批流及 API 编排等模块设计，保障平台</text>
+<text class="body" x="76" y="281.59999999999997">底座的灵活扩展性，有效降低定制开发成本。</text>
+<text class="body" x="58" y="301.29999999999995">• 主导大客户方案交付与跨系统集成。 针对宝洁、中消云设计定制方案，解决多业务线及复杂审批隔离难题；联合 Salesforce 金牌服务商</text>
+<text class="body" x="76" y="318.49999999999994">蓝岭科技，攻克平台与 ERP/CRM 等系统的接口集成与数据互通瓶颈。</text>
+<text class="title" x="58" y="347.19999999999993">道一云 七巧Plus低代码平台</text>
+<text class="date" x="736" y="347.19999999999993" text-anchor="end">2018.07 - 2019.08</text>
+<text class="desc" x="58" y="368.19999999999993">面向中小企业的 aPaaS 低代码平台，提供表单、工作流、报表、页面、低代码等引擎。</text>
+<text class="body" x="58" y="385.3999999999999">• 主导表单组件与复杂 BPMN 2.0 审批流引擎设计。 抽象设计 20+ 基础与关系组件，落地满足复杂分支和百级审批节点的审批流，在商业</text>
+<text class="body" x="76" y="402.5999999999999">化前支撑内部快速搭建并上架 10+ 行业应用。</text>
+<text class="body" x="58" y="422.2999999999999">• 负责多端配置页面引擎设计，成功推动产品商业化与技术沉淀。 设计移动与 PC 分端配置的页面引擎（10+组件），推动公有云商业化（</text>
+<text class="body" x="76" y="439.4999999999999">注册企业 8000+，现为公司战略级招牌产品）；提炼技术方案，协助申请 2 项低代码国家发明专利。</text>
+<text class="title" x="58" y="468.1999999999999">豌豆思维 统一监控平台</text>
+<text class="date" x="736" y="468.1999999999999" text-anchor="end">2021.03 - 2021.08</text>
+<text class="desc" x="58" y="489.1999999999999">面向豌豆思维内部的统一监控平台，提供多维度监控，助力研发和运营快速定位故障。</text>
+<text class="body" x="58" y="506.39999999999986">• 负责监控平台的核心指标规划、策略制定与多业务推广。 建立课堂与 Socket 稳定性指标，实现接入应用 380+、主机 1000+（覆盖率 90</text>
+<text class="body" x="76" y="523.5999999999999">%）；制定告警降噪方案，使告警信噪比提升 100%、问题定位时间缩短 50%+。</text>
+<text class="title" x="58" y="552.3">滴普 云原生与低代码平台</text>
+<text class="date" x="736" y="552.3" text-anchor="end">2019.09 - 2021.03</text>
+<text class="desc" x="58" y="573.3">滴普科技核心产品矩阵，包含前端可视化低代码平台、DevOps 平台及云容器平台。</text>
+<text class="body" x="58" y="590.5">• 主导前端低代码平台设计，支撑业务高效交付。 负责组件库与事件配置逻辑，提供前端组装、一站式构建部署能力，支持公司内部 20+</text>
+<text class="body" x="76" y="607.7">项目，助力标杆项目赢单。</text>
+<text class="body" x="58" y="627.4000000000001">• 负责容器平台（OpenKube）与 DevOps 平台（EDWard）的设计与重塑。 基于 Kubernetes 优化部署流程与资源隔离，在公司业务调整</text>
+<text class="body" x="76" y="644.6000000000001">期，成功将底层研发效能及集群管理能力进行重构与模块化复用。</text>
+<text class="sec" x="58" y="673.3000000000002">教育经历</text>
+<line x1="58" y1="683.3000000000002" x2="736" y2="683.3000000000002" stroke="#111" stroke-width="1.7"/>
+<text class="title" x="58" y="705.3000000000002">马来西亚国立大学 ｜ 人工智能（AI）硕士</text>
+<text class="date" x="736" y="705.3000000000002" text-anchor="end">2025.03 - 2026.11</text>
+<text class="body" x="58" y="726.3000000000002">• 研究方向：专注于人工智能与自然语言驱动的业务流程自动化（Text-to-Workflow），研究如何将用户意图/自然语言智能转换为结构化</text>
+<text class="body" x="76" y="743.5000000000002">、可执行的自动化业务流程。</text>
+<text class="body" x="58" y="763.2000000000003">• 主修课程：机器学习、高级AI算法、自然语言处理（NLP）、数据挖掘等。</text>
+<text class="body" x="58" y="782.9000000000003">• 培养模式：全英文授课（具备良好的英文专业文献阅读与技术文档理解能力）。</text>
+<text class="title" x="58" y="811.6000000000004">广州软件学院 ｜ 软件工程 本科</text>
+<text class="date" x="736" y="811.6000000000004" text-anchor="end">2014.08 - 2018.06</text>
+<text class="body" x="58" y="832.6000000000004">• 奖项：优秀毕业生、优秀毕业生冠军奖、国家单项奖学金、广东省优秀共青团干部。</text>
+<text class="body" x="58" y="852.3000000000004">• 实践：发现杯软件设计大赛全国二等奖、计算机设计大赛全国三等奖、蓝桥杯全国选拔赛二等奖。</text>
 </svg>
