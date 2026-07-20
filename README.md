@@ -1,31 +1,76 @@
-# AweiAIPD｜林镇伟 AI 产品经理简历
+# 林镇伟｜AI 产品经理简历
 
-本版本完成两项更新：
+纯静态 GitHub Pages 简历，无框架、无构建依赖。
 
-1. 浏览器标签图标替换为已确认的深蓝色 `LZ` 个人标志。
-2. 更新“个人总结”三段文案。
+## 项目结构
 
-## 保持不变
+```text
+.
+├── index.html          # 页面入口，不放具体简历文案
+├── resume-data.js      # 唯一的简历内容数据源
+├── app.js              # 根据 resume-data.js 自动生成两页简历
+├── style.css           # 网页与 A4 打印样式
+├── assets/
+│   ├── profile.jpg
+│   ├── favicon-lz-32.png
+│   └── favicon-lz-192.png
+└── .nojekyll
+```
 
-- 工作经历、项目经历和教育经历文案
-- 头像
-- 字体、字号、行距和黑白版式
-- PC 端打印按钮
-- 手机端隐藏打印按钮
-- 打印 A4 两页，并已修复空白第 3 页问题
+## 修改简历文字
 
-由于新的个人总结篇幅更长，“项目经历”完整移动到第 2 页开头，以保持原字号和 A4 两页。
+以后只修改：
 
-## 上传 GitHub
+```text
+resume-data.js
+```
 
-解压 ZIP 后，将全部文件上传并覆盖到仓库根目录：
+常见位置：
 
-- `.nojekyll`
-- `index.html`
-- `style.css`
-- `resume.pdf`
-- `README.md`
-- `assets/`
-- `source/`
+- `profile`：姓名、电话、邮箱、求职状态
+- `summary`：个人总结
+- `experience`：工作经历
+- `projects`：项目经历
+- `education`：教育经历
 
-仓库首页必须直接看到 `index.html`，不要直接上传 ZIP。
+不要再手工维护 SVG、隐藏 HTML 或重复的源文件。
+
+## 修改样式
+
+只修改：
+
+```text
+style.css
+```
+
+页面被明确拆成两张 A4：
+
+- 第 1 页：个人信息、个人总结、工作经历
+- 第 2 页：项目经历、教育经历
+
+打印时浏览器会强制按两张 A4 分页。
+
+## 本地预览
+
+直接打开 `index.html` 即可，也可以在目录执行：
+
+```bash
+python3 -m http.server 8080
+```
+
+然后访问 `http://localhost:8080`。
+
+## GitHub Pages
+
+仓库是纯静态页面，可直接使用 GitHub Pages 部署。修改文件并提交到主分支后，等待 Pages 更新即可。
+
+## 打印 / 保存 PDF
+
+点击页面右上角「打印 / 保存 PDF」，打印设置建议：
+
+- 纸张：A4
+- 缩放：100%
+- 边距：无
+- 页眉和页脚：关闭
+
+打印内容严格分为 2 页。

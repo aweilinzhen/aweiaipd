@@ -1,8 +1,13 @@
 :root {
   color-scheme: light;
-  --page-width: 210mm;
-  --page-height: 297mm;
-  --page-gap: 24px;
+  --paper-width: 210mm;
+  --paper-height: 297mm;
+  --paper-bg: #fff;
+  --canvas-bg: #ededed;
+  --text: #151515;
+  --muted: #3f3f3f;
+  --line: #262626;
+  --screen-gap: 24px;
 }
 
 * {
@@ -16,9 +21,10 @@ body {
 }
 
 body {
-  background: #ededed;
-  color: #111;
-  font-family: Arial, "Microsoft YaHei", sans-serif;
+  background: var(--canvas-bg);
+  color: var(--text);
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
 }
@@ -27,47 +33,190 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--page-gap);
+  gap: var(--screen-gap);
   padding: 24px 16px 40px;
 }
 
 .resume-page {
-  position: relative;
-  width: min(var(--page-width), calc(100vw - 32px));
-  aspect-ratio: 210 / 297;
+  width: min(var(--paper-width), calc(100vw - 32px));
+  height: var(--paper-height);
+  padding: 14mm 15mm 12mm;
   overflow: hidden;
-  background: #fff;
+  background: var(--paper-bg);
   box-shadow: 0 4px 22px rgb(0 0 0 / 14%);
 }
 
-.page-art {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: fill;
-  user-select: none;
-  -webkit-user-drag: none;
+.profile-header {
+  min-height: 31mm;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 4.5mm;
 }
 
-/*
- * 页面视觉由矢量图精确复刻；以下文字只用于搜索引擎、无障碍阅读器和页面检索，
- * 不参与可见排版，因此不会受不同系统字体影响。
- */
-.semantic-text {
-  position: absolute !important;
-  width: 1px !important;
-  height: 1px !important;
-  padding: 0 !important;
-  margin: -1px !important;
-  overflow: hidden !important;
-  clip: rect(0, 0, 0, 0) !important;
-  white-space: nowrap !important;
-  border: 0 !important;
+.profile-main {
+  min-width: 0;
+  padding-top: 0.5mm;
+}
+
+.profile-main h1 {
+  margin: 0 0 1.6mm;
+  font-size: 24px;
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.contact-line,
+.status-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0;
+  margin: 0;
+  font-size: 11.4px;
+  line-height: 1.55;
+  color: #222;
+}
+
+.contact-line span:not(:last-child)::after,
+.status-line span:not(:last-child)::after {
+  content: " 丨 ";
+  color: #555;
+}
+
+.profile-photo {
+  width: 22mm;
+  height: 28mm;
+  object-fit: cover;
+  object-position: center 20%;
+  flex: 0 0 auto;
+}
+
+.resume-section + .resume-section {
+  margin-top: 4.5mm;
+}
+
+.section-title {
+  margin: 0 0 2.6mm;
+  padding: 0 0 1.4mm;
+  border-bottom: 1.6px solid var(--line);
+  font-size: 20px;
+  line-height: 1.05;
+  font-weight: 700;
+}
+
+.bullet-list {
+  margin: 0;
+  padding-left: 5.3mm;
+  font-size: 11.3px;
+  line-height: 1.55;
+}
+
+.bullet-list li {
+  margin: 0 0 1.35mm;
+  padding-left: 0.5mm;
+}
+
+.bullet-list li:last-child {
+  margin-bottom: 0;
+}
+
+.entry {
+  margin: 0 0 3.2mm;
+  break-inside: avoid;
+}
+
+.entry:last-child {
+  margin-bottom: 0;
+}
+
+.entry-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 10mm;
+  margin-bottom: 0.7mm;
+}
+
+.entry-heading h3 {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.35;
+  font-weight: 700;
+}
+
+.entry-heading time {
+  white-space: nowrap;
+  font-size: 11.2px;
+  line-height: 1.35;
+  color: var(--muted);
+}
+
+.entry-subtitle {
+  margin: 0 0 1.1mm;
+  font-size: 11.2px;
+  line-height: 1.45;
+  color: #333;
+}
+
+.entry .bullet-list {
+  font-size: 11.15px;
+  line-height: 1.5;
+}
+
+.entry .bullet-list li {
+  margin-bottom: 0.9mm;
+}
+
+/* 第2页更紧凑，但字号与第1页保持统一。 */
+.page-two {
+  padding-top: 13mm;
+}
+
+.page-two .resume-section + .resume-section {
+  margin-top: 4mm;
+}
+
+.page-two .entry {
+  margin-bottom: 2.8mm;
+}
+
+.page-two .entry-subtitle {
+  margin-bottom: 0.8mm;
+}
+
+.page-two .entry .bullet-list li {
+  margin-bottom: 0.65mm;
+}
+
+.page-actions {
+  position: fixed;
+  top: 20px;
+  right: 24px;
+  z-index: 30;
+}
+
+.print-button {
+  min-height: 42px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 9px;
+  background: #111;
+  color: #fff;
+  font: 600 14px/1 "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+  box-shadow: 0 6px 18px rgb(0 0 0 / 18%);
+  cursor: pointer;
+}
+
+.print-button:hover {
+  background: #2b2b2b;
 }
 
 @media (max-width: 720px) {
   :root {
-    --page-gap: 14px;
+    --screen-gap: 14px;
   }
 
   .resume {
@@ -76,7 +225,50 @@ body {
 
   .resume-page {
     width: calc(100vw - 16px);
+    height: auto;
+    min-height: calc((100vw - 16px) * 297 / 210);
+    padding: 7vw 6.2vw;
     box-shadow: 0 2px 14px rgb(0 0 0 / 12%);
+  }
+
+  .page-actions {
+    display: none;
+  }
+
+  .profile-header {
+    min-height: 0;
+  }
+
+  .profile-photo {
+    width: 18vw;
+    height: 23vw;
+    max-width: 82px;
+    max-height: 105px;
+  }
+
+  .profile-main h1 {
+    font-size: clamp(20px, 5.5vw, 24px);
+  }
+
+  .section-title {
+    font-size: clamp(17px, 4.7vw, 20px);
+  }
+
+  .entry-heading {
+    gap: 8px;
+  }
+
+  .entry-heading h3 {
+    font-size: clamp(12px, 3.5vw, 14.5px);
+  }
+
+  .entry-heading time,
+  .entry-subtitle,
+  .bullet-list,
+  .entry .bullet-list,
+  .contact-line,
+  .status-line {
+    font-size: clamp(9px, 2.65vw, 11.3px);
   }
 }
 
@@ -88,94 +280,35 @@ body {
 @media print {
   html,
   body {
-    width: 210mm;
-    height: auto !important;
-    min-height: 0 !important;
+    width: var(--paper-width);
     margin: 0 !important;
     padding: 0 !important;
-    background: #fff;
-    overflow: visible;
+    background: #fff !important;
   }
 
-  .page-actions,
-  .semantic-text {
+  .page-actions {
     display: none !important;
   }
 
   .resume {
     display: block;
-    width: 210mm;
+    width: var(--paper-width);
     margin: 0;
     padding: 0;
   }
 
   .resume-page {
-    display: block;
-    width: 210mm;
-    height: 297mm;
-    aspect-ratio: auto;
+    width: var(--paper-width);
+    height: var(--paper-height);
     margin: 0;
-    overflow: hidden;
     box-shadow: none;
+    overflow: hidden;
     break-inside: avoid;
     page-break-inside: avoid;
-    break-after: auto;
-    page-break-after: auto;
   }
 
-  .resume-page:not(:first-of-type) {
+  .resume-page + .resume-page {
     break-before: page;
     page-break-before: always;
   }
 }
-.page-actions {
-  position: fixed;
-  top: 20px;
-  right: 24px;
-  z-index: 20;
-}
-
-.print-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  min-height: 42px;
-  padding: 0 16px;
-  border: 1px solid rgb(0 0 0 / 10%);
-  border-radius: 10px;
-  background: #111;
-  color: #fff;
-  font: 600 15px/1 Arial, "Microsoft YaHei", sans-serif;
-  box-shadow: 0 6px 18px rgb(0 0 0 / 18%);
-  cursor: pointer;
-  transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
-}
-
-.print-button:hover {
-  transform: translateY(-1px);
-  background: #252525;
-  box-shadow: 0 8px 22px rgb(0 0 0 / 22%);
-}
-
-.print-button:active {
-  transform: translateY(0);
-}
-
-.print-button:focus-visible {
-  outline: 3px solid rgb(0 102 255 / 35%);
-  outline-offset: 3px;
-}
-
-.print-button svg {
-  width: 19px;
-  height: 19px;
-  fill: currentColor;
-}
-
-@media (max-width: 720px) {
-  .page-actions {
-    display: none !important;
-  }
-}
-
