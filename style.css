@@ -80,8 +80,8 @@ body {
   color: #222;
 }
 
-.contact-line span:not(:last-child)::after,
-.status-line span:not(:last-child)::after {
+.contact-line span + span::before,
+.status-line span + span::before {
   content: " 丨 ";
   color: #555;
 }
