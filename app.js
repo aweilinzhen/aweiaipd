@@ -488,30 +488,32 @@
   /* =========================================================
      打印功能
 
-     正确链路：
+     稳定链路：
 
      点击按钮
      ↓
-     打开 print.html
+     将当前已经渲染好的 #resume 克隆并写入 localStorage
      ↓
-     print.js 从当前主页读取 #resume
+     打开 print.html?token=...
      ↓
-     复制当前已经渲染好的简历
+     print.js 根据 token 读取打印快照
      ↓
      print.css 负责两页 A4
      ↓
      window.print()
 
-     不再：
-     - 直接打印当前 PC 长页
-     - 创建隐藏 iframe
+     为什么不只依赖 window.opener：
+     - 某些浏览器/安全策略会隔离 opener
+     - 打印页刷新后 opener 可能不可用
+     - localStorage 同源共享，更稳定
+
+     print.js 仍保留 opener 作为兜底。
   ========================================================= */
 
   const printButton =
     document.querySelector(
       "#printButton"
     );
-
 
   if (!printButton) {
     console.warn(
@@ -520,72 +522,142 @@
     return;
   }
 
+  const PRINT_STORAGE_PREFIX =
+    "resume-print-snapshot:";
+
+  const createPrintSnapshot = () => {
+    const clonedResume =
+      resume.cloneNode(true);
+
+    /*
+      把图片地址转换为绝对地址。
+      即使以后 print.html 移动目录，头像也不会因为相对路径失效。
+    */
+    clonedResume
+      .querySelectorAll("img[src]")
+      .forEach((image) => {
+        try {
+          image.src = new URL(
+            image.getAttribute("src"),
+            window.location.href
+          ).href;
+        } catch (error) {
+          console.warn(
+            "图片地址转换失败：",
+            image.getAttribute("src"),
+            error
+          );
+        }
+      });
+
+    return clonedResume.innerHTML;
+  };
 
   printButton.addEventListener(
     "click",
-
     () => {
-
-      /*
-        防止用户快速连续点击。
-      */
-
-      if (
-        printButton.disabled
-      ) {
+      if (printButton.disabled) {
         return;
       }
 
+      printButton.disabled = true;
+
+      const token = [
+        Date.now().toString(36),
+        Math.random()
+          .toString(36)
+          .slice(2, 10)
+      ].join("-");
+
+      const storageKey =
+        `${PRINT_STORAGE_PREFIX}${token}`;
+
+      const payload = {
+        html: createPrintSnapshot(),
+        title: document.title,
+        createdAt: Date.now()
+      };
+
+      let snapshotStored = false;
+
+      try {
+        localStorage.setItem(
+          storageKey,
+          JSON.stringify(payload)
+        );
+        snapshotStored = true;
+      } catch (error) {
+        /*
+          本地存储不可用时不直接失败。
+          print.js 仍会尝试通过同源 window.opener 读取当前简历。
+        */
+        console.warn(
+          "无法写入打印快照，将使用 opener 兜底：",
+          error
+        );
+      }
 
       /*
-        这里必须直接在用户 click 事件中调用 window.open。
-
-        不要先 await、setTimeout 或异步处理，
-        否则 Chrome / Safari 可能认为这是广告弹窗，
-        从而阻止 print.html 打开。
+        必须仍然在用户 click 事件的同步调用链里执行 window.open，
+        避免被浏览器当作广告弹窗拦截。
       */
-
       const printWindow =
         window.open(
-          `print.html?v=${Date.now()}`,
+          `print.html?token=${encodeURIComponent(token)}&v=${Date.now()}`,
           "_blank"
         );
 
-
-      /*
-        如果返回 null，
-        说明浏览器拦截了弹窗。
-      */
-
       if (!printWindow) {
+        if (snapshotStored) {
+          localStorage.removeItem(
+            storageKey
+          );
+        }
+
+        printButton.disabled = false;
 
         alert(
           "浏览器阻止了打印窗口。\n\n" +
-          "请允许 aweilinzhen.github.io 的弹出窗口，" +
-          "然后重新点击“打印 / 保存 PDF”。"
+          "请允许当前网站打开弹出窗口，然后重新点击“打印 / 保存 PDF”。"
         );
-
         return;
       }
 
-
-      /*
-        让新打开的打印页获得焦点。
-      */
-
       try {
-
         printWindow.focus();
-
       } catch (error) {
-
         console.warn(
           "无法自动聚焦打印窗口：",
           error
         );
-
       }
 
+      /*
+        正常情况下 print.js 读取后会立即删除。
+        这里再做一次延迟清理，防止用户在打印页加载前就关闭窗口，
+        导致临时简历快照残留在 localStorage。
+      */
+      if (snapshotStored) {
+        window.setTimeout(
+          () => {
+            localStorage.removeItem(
+              storageKey
+            );
+          },
+          60 * 1000
+        );
+      }
+
+      /*
+        只做短暂防抖，不等待打印页完成。
+        打印页会自行读取并删除快照。
+      */
+      window.setTimeout(
+        () => {
+          printButton.disabled = false;
+        },
+        800
+      );
     }
   );
 
