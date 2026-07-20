@@ -56,9 +56,9 @@
         <div class="profile-main">
           <h1>${esc(data.profile.name)}</h1>
           <p class="contact-line">
+            <span>${esc(data.profile.gender)}</span>
             <span>${esc(data.profile.phone)}</span>
             <span>${esc(data.profile.email)}</span>
-            <span>${esc(data.profile.gender)}</span>
           </p>
           <p class="status-line">
             <span>${esc(data.profile.status)}</span>
