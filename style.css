@@ -86,7 +86,7 @@ body {
 }
 
 .page-two {
-  padding-top: 4.5mm;
+  padding-top: 3.2mm;
 }
 
 /* =========================
@@ -270,6 +270,10 @@ body {
 
 .entry .bullet-list li {
   margin-bottom: 0.9mm;
+}
+
+.entry .bullet-list li:last-child {
+  margin-bottom: 0;
 }
 
 /* =========================================================
