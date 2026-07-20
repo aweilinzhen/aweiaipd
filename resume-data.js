@@ -4,7 +4,7 @@ window.RESUME_DATA = {
     gender: "男",
     phone: "156-2613-0517",
     email: "aweilinzhen@gmail.com",
-    status: "已离职（随时到岗）",
+    status: "已离职",
     targetRole: "AI产品经理",
     avatar: "assets/profile.jpg"
   },
@@ -108,7 +108,7 @@ window.RESUME_DATA = {
       degree: "人工智能（AI）硕士",
       period: "2025.03 - 2026.11",
       bullets: [
-        "研究方向：专注于人工智能与自然语言驱动的业务流程自动化（Text-to-Workflow），研究如何将用户意图/自然语言智能转换为结构化、可执行的自动化业务流程。",
+        "研究方向：专注于人工智能与自然语言驱动的业务流程自动化（Text-to-Workflow），研究如何将自然语言智能转换为结构化、可执行的自动化业务流程。",
         "主修课程：机器学习、高级AI算法、自然语言处理（NLP）、数据挖掘等。",
         "培养模式：全英文授课（具备良好的英文专业文献阅读与技术文档理解能力）。"
       ]
