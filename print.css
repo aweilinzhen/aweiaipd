@@ -14,7 +14,7 @@ body {
   margin: 0;
   padding: 0;
 
-  background: #ffffff;
+  background: #e8e8e8;
   color: #151515;
 
   font-family:
@@ -24,53 +24,38 @@ body {
     Arial,
     sans-serif;
 
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 
-body {
-  width: 210mm;
-}
+/* =========================================================
+   一、Canvas 生成源
 
-/* =========================
-   两页 A4
-========================= */
+   这里仍然使用真实 DOM 排版，但它只负责“截图”。
+   最终不会直接把这些 DOM 交给 Chrome 打印。
+========================================================= */
 
 .resume {
   display: block;
-
   width: 210mm;
-
-  margin: 0;
+  margin: 18px auto;
   padding: 0;
-
   background: #ffffff;
 }
 
 .resume-page {
   display: block;
-
   width: 210mm;
   height: 297mm;
 
   margin: 0;
-
   padding:
     11mm
     15mm
     10mm;
 
   overflow: hidden;
-
-  /* 固定为单张 A4；若内容超出，print.js 会在控制台提示。 */
-
   background: #ffffff;
-
-  page-break-after: always;
-  break-after: page;
-}
-
-.resume-page:last-child {
-  page-break-after: auto;
-  break-after: auto;
 }
 
 .page-one,
@@ -93,7 +78,6 @@ body {
   justify-content: space-between;
 
   gap: 18px;
-
   margin-bottom: 3mm;
 }
 
@@ -107,7 +91,6 @@ body {
 
   font-size: 24px;
   line-height: 1.1;
-
   font-weight: 700;
 
   color: #151515;
@@ -130,7 +113,6 @@ body {
 .contact-line span + span::before,
 .status-line span + span::before {
   content: " 丨 ";
-
   color: #555555;
 }
 
@@ -156,13 +138,10 @@ body {
   margin: 0 0 2mm;
   padding: 0 0 1.1mm;
 
-  border-bottom:
-    1.6px solid
-    #262626;
+  border-bottom: 1.6px solid #262626;
 
   font-size: 19px;
   line-height: 1.05;
-
   font-weight: 700;
 
   color: #151515;
@@ -194,46 +173,43 @@ body {
 }
 
 /* =========================
-   经历
+   工作 / 项目 / 教育经历
 ========================= */
 
 .entry {
   margin: 0 0 2.2mm;
-
-  page-break-inside: avoid;
-  break-inside: avoid-page;
 }
 
 .entry:last-child {
   margin-bottom: 0;
 }
 
+/*
+  这里改用 flex，不依赖 grid。
+  html2canvas 对这种两端布局更稳定。
+*/
 .entry-heading {
-  display: grid;
-
-  grid-template-columns:
-    minmax(0, 1fr)
-    auto;
-
+  display: flex;
   align-items: baseline;
+  justify-content: space-between;
 
   gap: 10mm;
-
   margin-bottom: 0.5mm;
 }
 
 .entry-heading h3 {
+  min-width: 0;
   margin: 0;
 
   font-size: 13.8px;
   line-height: 1.3;
-
   font-weight: 700;
 
   color: #151515;
 }
 
 .entry-heading time {
+  flex: 0 0 auto;
   white-space: nowrap;
 
   font-size: 10.8px;
@@ -264,62 +240,148 @@ body {
   margin-bottom: 0;
 }
 
-/* 打印页必须显示续页标题 */
+/* 打印页必须恢复“工作经历（续）” */
 .screen-only-hidden-title {
   display: block !important;
 }
 
+/* =========================================================
+   二、最终打印图片
+========================================================= */
+
+.print-output {
+  width: 210mm;
+  margin: 18px auto;
+  padding: 0;
+}
+
+.print-image-page {
+  width: 210mm;
+  height: 297mm;
+
+  margin: 0 auto 18px;
+  overflow: hidden;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 2px 14px
+    rgb(0 0 0 / 15%);
+}
+
+.print-image-page:last-child {
+  margin-bottom: 0;
+}
+
+.print-image-page img {
+  display: block;
+
+  width: 210mm;
+  height: 297mm;
+
+  margin: 0;
+  padding: 0;
+
+  object-fit: fill;
+  background: #ffffff;
+}
+
 /* =========================
-   打印页错误信息
+   状态 / 错误
 ========================= */
+
+.print-status {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  z-index: 100;
+
+  transform: translateX(-50%);
+
+  padding: 10px 16px;
+  border-radius: 8px;
+
+  background: rgb(20 20 20 / 88%);
+  color: #ffffff;
+
+  font-size: 14px;
+  line-height: 1.4;
+
+  box-shadow:
+    0 4px 16px
+    rgb(0 0 0 / 18%);
+}
 
 .print-error {
-  margin: 40px;
+  max-width: 760px;
+  margin: 40px auto;
+  padding: 18px 20px;
 
-  font-size: 16px;
-  line-height: 1.6;
+  border: 1px solid #f0b4ae;
+  border-radius: 8px;
 
+  background: #fff5f4;
   color: #b42318;
+
+  font-size: 15px;
+  line-height: 1.65;
 }
 
-/* =========================
-   屏幕预览
-========================= */
-
-@media screen {
-  body {
-    background: #e8e8e8;
-  }
-
-  .resume-page {
-    margin: 18px auto;
-
-    box-shadow:
-      0 2px 14px
-      rgb(0 0 0 / 15%);
-  }
-}
+/* =========================================================
+   三、真正打印时：只打印两张 A4 图片
+========================================================= */
 
 @media print {
   html,
-  body,
-  .resume,
-  .resume-page {
-    background: #ffffff !important;
-    color: #151515 !important;
-  }
-
-  /*
-    Chrome 打印预览中避免使用 -webkit-text-fill-color。
-    普通 color 属性对正文、标题、列表文字更稳定。
-  */
-  .resume-page * {
-    text-shadow: none !important;
-    filter: none !important;
-  }
-
-  .resume-page {
+  body {
+    width: 210mm;
     margin: 0;
+    padding: 0;
+    background: #ffffff;
+  }
+
+  #captureSource,
+  .print-status,
+  .print-error {
+    display: none !important;
+  }
+
+  .print-output {
+    display: block !important;
+
+    width: 210mm;
+    margin: 0;
+    padding: 0;
+  }
+
+  .print-image-page {
+    display: block;
+
+    width: 210mm;
+    height: 297mm;
+
+    margin: 0;
+    padding: 0;
+
+    overflow: hidden;
     box-shadow: none;
+
+    page-break-after: always;
+    break-after: page;
+  }
+
+  .print-image-page:last-child {
+    page-break-after: auto;
+    break-after: auto;
+  }
+
+  .print-image-page img {
+    display: block;
+
+    width: 210mm;
+    height: 297mm;
+
+    margin: 0;
+    padding: 0;
   }
 }

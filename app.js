@@ -498,7 +498,9 @@
      ↓
      print.js 根据 token 读取打印快照
      ↓
-     print.css 负责两页 A4
+     print.html 将两页 DOM 渲染成高清 Canvas 图片
+     ↓
+     Chrome / Safari 只打印两张 A4 图片
      ↓
      window.print()
 
