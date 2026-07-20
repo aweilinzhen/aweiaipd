@@ -158,7 +158,7 @@
     data.experience
       .slice(
         0,
-        2
+        3
       )
       .map(
         (item) =>
@@ -185,7 +185,7 @@
   const secondPageExperienceHtml =
     data.experience
       .slice(
-        2
+        3
       )
       .map(
         (item) =>
