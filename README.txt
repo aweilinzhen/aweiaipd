@@ -1,16 +1,19 @@
-打印最终修复版
+基于用户提供的 RESUME_DATA 修改：
 
-覆盖仓库根目录：
-- style.css
+1. 保留 profile / summary / experience / education 原文。
+2. 将原 projects[0] 的 AI 项目移出，改为独立 aiProject。
+3. 页面顺序：个人总结 → AI 项目经历 → 工作经历 → 项目经历 → 教育经历。
+4. projects 中删除 AI 项目，避免重复。
+5. 修复两个下载按钮：
+   - index.html 只保留 1 个下载 + 1 个打印
+   - app.js 不再创建任何下载按钮，只绑定 #printButton
+6. 打印继续使用独立 iframe，两页 A4。
+
+建议同时覆盖：
+- index.html
+- resume-data.js
 - app.js
+- style.css
 
-修复点：
-1. 移除 297mm 临界页高，打印页改为 296mm，避免 Chrome/Safari 生成第3页或裁切。
-2. 不再在第二页使用 break-before；改为第一页 break-after。
-3. 不对整个 .resume-page 使用 break-inside: avoid，避免与强制分页冲突。
-4. 点击打印前等待头像图片与字体加载完成。
-5. 第一页、第二页使用同一套间距，不再单独压缩第二页。
-6. 修复联系方式前面多余的“丨”。
-
-打印设置：
-A4 / 纵向 / 缩放100% / 边距无 / 关闭页眉页脚。
+特别注意：
+如果只替换 resume-data.js，而保留旧 app.js，两个下载按钮问题仍可能存在。

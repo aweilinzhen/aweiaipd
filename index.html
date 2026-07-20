@@ -1,22 +1,11 @@
 <!doctype html>
 <html lang="zh-CN">
-
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="林镇伟 - AI产品经理个人简历" />
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  />
-
-  <meta
-    name="description"
-    content="林镇伟 - AI产品经理个人简历"
-  />
-
-  <title>
-    林镇伟｜AI产品经理简历
-  </title>
+  <title>林镇伟｜AI产品经理简历</title>
 
   <link
     rel="icon"
@@ -27,43 +16,37 @@
 
   <link
     rel="stylesheet"
-    href="style.css"
+    href="style.css?v=20260721-ai-project-v2"
   />
 
   <script
     defer
-    src="resume-data.js"
+    src="resume-data.js?v=20260721-ai-project-v2"
   ></script>
 
   <script
     defer
-    src="app.js"
+    src="app.js?v=20260721-ai-project-v2"
   ></script>
 </head>
 
 <body>
 
   <!--
-    PC 端页面操作
-
-    下载：
-    直接下载仓库根目录 resume.pdf
-
-    打印：
-    由 app.js 监听 #printButton
-    调用浏览器打印功能
+    注意：按钮只在 index.html 定义一次。
+    app.js 不再创建下载按钮或打印按钮。
+    因此不会出现两个“下载”。
   -->
-
   <div
     class="page-actions"
     aria-label="简历操作"
   >
-
     <a
+      id="downloadButton"
       class="action-button download-button"
       href="resume.pdf"
       download="林镇伟-AI产品经理简历.pdf"
-      aria-label="下载简历PDF"
+      aria-label="下载简历 PDF"
     >
       下载
     </a>
@@ -76,17 +59,13 @@
     >
       打印
     </button>
-
   </div>
-
-  <!-- 简历主体 -->
 
   <main
     id="resume"
     class="resume"
-    aria-label="林镇伟AI产品经理简历"
+    aria-label="林镇伟 AI 产品经理简历"
   ></main>
 
 </body>
-
 </html>

@@ -1,834 +1,713 @@
 (function () {
+  "use strict";
 
-  /* =========================================================
-     获取简历数据
-  ========================================================= */
-
-  const data =
-    window.RESUME_DATA;
+  const data = window.RESUME_DATA;
 
   if (!data) {
-
     console.error(
       "未找到 window.RESUME_DATA，请检查 resume-data.js 是否正确加载。"
     );
-
     return;
-
   }
-
-
-  /* =========================================================
-     HTML 转义
-  ========================================================= */
 
   const esc = (value) =>
     String(value ?? "")
-      .replaceAll(
-        "&",
-        "&amp;"
-      )
-      .replaceAll(
-        "<",
-        "&lt;"
-      )
-      .replaceAll(
-        ">",
-        "&gt;"
-      )
-      .replaceAll(
-        '"',
-        "&quot;"
-      )
-      .replaceAll(
-        "'",
-        "&#039;"
-      );
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
 
-
-  /* =========================================================
-     通用列表
-  ========================================================= */
-
-  const bulletList = (
-    items = []
-  ) => `
+  const bulletList = (items = []) => `
     <ul class="bullet-list">
-
-      ${
-        items
-          .map(
-            (item) =>
-              `<li>${esc(item)}</li>`
-          )
-          .join("")
-      }
-
+      ${items.map((item) => `<li>${esc(item)}</li>`).join("")}
     </ul>
   `;
 
-
-  /* =========================================================
-     通用经历条目
-  ========================================================= */
-
   const entry = (
-
-    {
-      title,
-      period,
-      subtitle,
-      bullets
-    },
-
+    { title, period, subtitle, bullets },
     className = "entry"
-
   ) => `
-
     <article class="${className}">
-
       <div class="entry-heading">
-
-        <h3>
-          ${esc(title)}
-        </h3>
-
-        <time>
-          ${esc(period)}
-        </time>
-
+        <h3>${esc(title)}</h3>
+        <time>${esc(period)}</time>
       </div>
 
       ${
         subtitle
-          ? `
-            <p class="entry-subtitle">
-              ${esc(subtitle)}
-            </p>
-          `
+          ? `<p class="entry-subtitle">${esc(subtitle)}</p>`
           : ""
       }
 
-      ${
-        bulletList(
-          bullets
-        )
-      }
-
+      ${bulletList(bullets)}
     </article>
-
   `;
-
-
-  /* =========================================================
-     通用模块
-  ========================================================= */
 
   const section = (
     title,
-    content
+    content,
+    className = ""
   ) => `
-
-    <section class="resume-section">
-
-      <h2 class="section-title">
-        ${esc(title)}
-      </h2>
-
+    <section class="resume-section ${className}">
+      <h2 class="section-title">${esc(title)}</h2>
       ${content}
-
     </section>
-
   `;
 
+  const aiProjectHtml = entry(
+    {
+      title: data.aiProject.name,
+      period: data.aiProject.period,
+      subtitle: data.aiProject.subtitle,
+      bullets: data.aiProject.bullets
+    },
+    "entry ai-project-entry"
+  );
 
-  /* =========================================================
-     工作经历
-  ========================================================= */
+  /*
+    打印仍保持两页：
+    第1页：个人总结 + AI 项目经历 + 有信云 + 豌豆思维
+    第2页：滴普科技 + 道一云 + 项目经历 + 教育经历
 
-  const experienceHtml =
+    PC 端视觉连续，因此看起来仍是一张长页。
+  */
 
+  const firstPageExperienceHtml =
     data.experience
-      .map(
-        (item) =>
-
-          entry(
-
-            {
-
-              title:
-                item.company,
-
-              period:
-                item.period,
-
-              subtitle:
-                item.subtitle,
-
-              bullets:
-                item.bullets
-
-            },
-
-            "entry experience-entry"
-
-          )
+      .slice(0, 2)
+      .map((item) =>
+        entry(
+          {
+            title: item.company,
+            period: item.period,
+            subtitle: item.subtitle,
+            bullets: item.bullets
+          },
+          "entry experience-entry"
+        )
       )
       .join("");
 
-
-  /* =========================================================
-     项目经历
-  ========================================================= */
+  const secondPageExperienceHtml =
+    data.experience
+      .slice(2)
+      .map((item) =>
+        entry(
+          {
+            title: item.company,
+            period: item.period,
+            subtitle: item.subtitle,
+            bullets: item.bullets
+          },
+          "entry experience-entry"
+        )
+      )
+      .join("");
 
   const projectsHtml =
-
     data.projects
-      .map(
-        (item) =>
-
-          entry(
-
-            {
-
-              title:
-                item.name,
-
-              period:
-                item.period,
-
-              subtitle:
-                item.subtitle,
-
-              bullets:
-                item.bullets
-
-            },
-
-            "entry project-entry"
-
-          )
+      .map((item) =>
+        entry(
+          {
+            title: item.name,
+            period: item.period,
+            subtitle: item.subtitle,
+            bullets: item.bullets
+          },
+          "entry project-entry"
+        )
       )
       .join("");
-
-
-  /* =========================================================
-     教育经历
-  ========================================================= */
 
   const educationHtml =
-
     data.education
-      .map(
-        (item) =>
-
-          entry(
-
-            {
-
-              title:
-                `${item.school} ｜ ${item.degree}`,
-
-              period:
-                item.period,
-
-              subtitle:
-                "",
-
-              bullets:
-                item.bullets
-
-            },
-
-            "entry education-entry"
-
-          )
+      .map((item) =>
+        entry(
+          {
+            title: `${item.school} ｜ ${item.degree}`,
+            period: item.period,
+            subtitle: "",
+            bullets: item.bullets
+          },
+          "entry education-entry"
+        )
       )
       .join("");
 
-
-  /* =========================================================
-     生成简历页面
-  ========================================================= */
-
   const resume =
-    document.querySelector(
-      "#resume"
-    );
-
+    document.querySelector("#resume");
 
   if (!resume) {
-
-    console.error(
-      "未找到 #resume 容器。"
-    );
-
+    console.error("未找到 #resume 容器。");
     return;
-
   }
 
-
   resume.innerHTML = `
-
-    <!-- ==================================
-         第 1 页
-    =================================== -->
-
     <section
       class="resume-page page-one"
       aria-label="简历第1页"
     >
-
       <header class="profile-header">
 
         <div class="profile-main">
 
           <h1>
-            ${
-              esc(
-                data.profile.name
-              )
-            }
+            ${esc(data.profile.name)}
           </h1>
 
-
           <p class="contact-line">
-
-            <span>
-              ${
-                esc(
-                  data.profile.phone
-                )
-              }
-            </span>
-
-            <span>
-              ${
-                esc(
-                  data.profile.email
-                )
-              }
-            </span>
-
+            <span>${esc(data.profile.phone)}</span>
+            <span>${esc(data.profile.email)}</span>
           </p>
 
-
           <p class="status-line">
-
-            <span>
-              ${
-                esc(
-                  data.profile.targetRole
-                )
-              }
-            </span>
-
+            <span>${esc(data.profile.targetRole)}</span>
           </p>
 
         </div>
 
-
         <img
           class="profile-photo"
-          src="${
-            esc(
-              data.profile.avatar
-            )
-          }"
+          src="${esc(data.profile.avatar)}"
           alt="个人证件照"
         />
 
       </header>
 
+      ${section(
+        "个人总结",
+        bulletList(data.summary)
+      )}
 
-      ${
-        section(
+      ${section(
+        "AI 项目经历",
+        aiProjectHtml,
+        "ai-project-section"
+      )}
 
-          "个人总结",
-
-          bulletList(
-            data.summary
-          )
-
-        )
-      }
-
-
-      ${
-        section(
-
-          "工作经历",
-
-          experienceHtml
-
-        )
-      }
+      ${section(
+        "工作经历",
+        firstPageExperienceHtml
+      )}
 
     </section>
-
-
-    <!-- ==================================
-         第 2 页
-    =================================== -->
 
     <section
       class="resume-page page-two"
       aria-label="简历第2页"
     >
 
-      ${
-        section(
+      ${section(
+        "工作经历（续）",
+        secondPageExperienceHtml,
+        "continuation-section"
+      )}
 
-          "项目经历",
+      ${section(
+        "项目经历",
+        projectsHtml
+      )}
 
-          projectsHtml
-
-        )
-      }
-
-
-      ${
-        section(
-
-          "教育经历",
-
-          educationHtml
-
-        )
-      }
+      ${section(
+        "教育经历",
+        educationHtml
+      )}
 
     </section>
-
   `;
 
+  /*
+    PC 连续长页浏览时，
+    隐藏“工作经历（续）”标题，
+    视觉上让工作经历连续。
+
+    打印 iframe 中会恢复显示。
+  */
+  const continuationTitle =
+    document.querySelector(
+      ".continuation-section .section-title"
+    );
+
+  if (continuationTitle) {
+    continuationTitle.classList.add(
+      "screen-only-hidden-title"
+    );
+  }
 
   /* =========================================================
-     PC 操作按钮
-     下载 + 打印
+     独立 iframe 打印
   ========================================================= */
 
-  let pageActions =
-    document.querySelector(
-      ".page-actions"
-    );
+  const PRINT_CSS = `
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
 
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
 
-  /*
-    index.html 没有 page-actions 时，
-    自动创建。
+    html,
+    body {
+      margin: 0;
+      padding: 0;
 
-    这样不用强制修改 index.html。
-  */
+      background: #ffffff;
+      color: #151515;
 
-  if (!pageActions) {
+      font-family:
+        "PingFang SC",
+        "Microsoft YaHei",
+        "Noto Sans CJK SC",
+        Arial,
+        sans-serif;
 
-    pageActions =
-      document.createElement(
-        "div"
-      );
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
 
-    pageActions.className =
-      "page-actions";
+    .resume {
+      display: block;
+      width: 210mm;
 
-    pageActions.setAttribute(
-      "aria-label",
-      "简历操作"
-    );
+      margin: 0;
+      padding: 0;
 
-    document.body.appendChild(
-      pageActions
-    );
+      background: #ffffff;
+    }
 
-  }
+    .resume-page {
+      display: block;
 
+      width: 210mm;
+      height: 296mm;
 
-  /*
-    下载按钮
-  */
+      margin: 0;
 
-  let downloadButton =
-    document.querySelector(
-      "#downloadButton"
-    );
+      padding:
+        11mm
+        15mm
+        10mm;
 
+      overflow: hidden;
 
-  if (!downloadButton) {
+      background: #ffffff;
 
-    downloadButton =
-      document.createElement(
-        "a"
-      );
+      page-break-after: always;
+      break-after: page;
+    }
 
-    downloadButton.id =
-      "downloadButton";
+    .resume-page:last-child {
+      page-break-after: auto;
+      break-after: auto;
+    }
 
-    downloadButton.href =
-      "resume.pdf";
+    .page-one,
+    .page-two {
+      padding:
+        11mm
+        15mm
+        10mm;
+    }
 
-    downloadButton.download =
-      "林镇伟-AI产品经理简历.pdf";
+    .profile-header {
+      min-height: 28mm;
 
-    downloadButton.textContent =
-      "下载";
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
 
-    downloadButton.setAttribute(
-      "aria-label",
-      "下载简历PDF"
-    );
+      gap: 18px;
 
-    pageActions.prepend(
-      downloadButton
-    );
+      margin-bottom: 3mm;
+    }
 
-  }
+    .profile-main {
+      min-width: 0;
+      padding-top: 0.5mm;
+    }
 
+    .profile-main h1 {
+      margin: 0 0 1.3mm;
 
-  downloadButton.classList.add(
-    "action-button",
-    "download-button"
-  );
+      font-size: 24px;
+      line-height: 1.1;
 
+      font-weight: 700;
+    }
 
-  /*
-    打印按钮
-  */
+    .contact-line,
+    .status-line {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
 
-  let printButton =
-    document.querySelector(
-      "#printButton"
-    );
+      margin: 0;
 
+      font-size: 11.1px;
+      line-height: 1.5;
 
-  if (!printButton) {
+      color: #222222;
+    }
 
-    printButton =
-      document.createElement(
-        "button"
-      );
+    .contact-line span + span::before {
+      content: " 丨 ";
+      color: #555555;
+    }
 
-    printButton.id =
-      "printButton";
+    .profile-photo {
+      width: 21mm;
+      height: 27mm;
 
-    printButton.type =
-      "button";
+      object-fit: cover;
+      object-position: center 20%;
 
-    printButton.textContent =
-      "打印";
+      flex: 0 0 auto;
+    }
 
-    printButton.setAttribute(
-      "aria-label",
-      "打印简历"
-    );
+    .resume-section + .resume-section {
+      margin-top: 3.2mm;
+    }
 
-    pageActions.appendChild(
-      printButton
-    );
+    .section-title {
+      margin: 0 0 2mm;
+      padding: 0 0 1.1mm;
 
-  }
+      border-bottom:
+        1.6px solid
+        #262626;
 
+      font-size: 19px;
+      line-height: 1.05;
 
-  printButton.classList.add(
-    "action-button",
-    "print-button"
-  );
+      font-weight: 700;
+    }
 
+    .bullet-list {
+      margin: 0;
+      padding-left: 5.1mm;
 
-  /*
-    如果 index.html 原本存在旧按钮，
-    确保最终顺序始终为：
+      font-size: 10.9px;
+      line-height: 1.45;
+    }
 
-    下载 ｜ 打印
-  */
+    .bullet-list li {
+      margin: 0 0 0.8mm;
+      padding-left: 0.5mm;
+    }
 
-  pageActions.appendChild(
-    downloadButton
-  );
+    .bullet-list li:last-child {
+      margin-bottom: 0;
+    }
 
-  pageActions.appendChild(
-    printButton
-  );
+    .entry {
+      margin: 0 0 2.2mm;
 
+      page-break-inside: avoid;
+      break-inside: avoid-page;
+    }
 
-  /* =========================================================
-     打印准备
-  ========================================================= */
+    .entry:last-child {
+      margin-bottom: 0;
+    }
 
-  /*
-    等待两帧浏览器绘制。
-  */
+    .entry-heading {
+      display: grid;
 
-  const nextPaint = () =>
+      grid-template-columns:
+        minmax(0, 1fr)
+        auto;
 
-    new Promise(
-      (resolve) => {
+      align-items: baseline;
 
-        requestAnimationFrame(
-          () => {
+      gap: 10mm;
 
-            requestAnimationFrame(
-              resolve
-            );
+      margin-bottom: 0.5mm;
+    }
 
-          }
-        );
+    .entry-heading h3 {
+      margin: 0;
 
-      }
-    );
+      font-size: 13.8px;
+      line-height: 1.3;
 
+      font-weight: 700;
+    }
 
-  /*
-    打印前等待：
+    .entry-heading time {
+      white-space: nowrap;
 
-    1. 所有图片加载
-    2. 图片完成解码
-    3. 字体加载
-    4. DOM 布局计算
-    5. 浏览器完成绘制
+      font-size: 10.8px;
+      line-height: 1.3;
 
-    解决 Chrome 打印预览中：
+      color: #3f3f3f;
+    }
 
-    - 头像正常
-    - 横线正常
-    - 列表圆点正常
-    - 正文文字消失
+    .entry-subtitle {
+      margin: 0 0 0.7mm;
 
-    的问题。
-  */
+      font-size: 10.8px;
+      line-height: 1.4;
 
-  async function waitForPrintReady() {
+      color: #333333;
+    }
 
-    /* =========================
-       等待图片
-    ========================= */
+    .entry .bullet-list {
+      font-size: 10.7px;
+      line-height: 1.42;
+    }
 
+    .entry .bullet-list li {
+      margin-bottom: 0.55mm;
+    }
+
+    .screen-only-hidden-title {
+      display: block !important;
+    }
+  `;
+
+  async function waitForImages(doc) {
     const images =
-      Array.from(
-        document.images
-      );
-
+      Array.from(doc.images);
 
     await Promise.all(
-
       images.map(
+        async (image) => {
 
-        async (
-          image
-        ) => {
-
-          if (
-            !image.complete
-          ) {
-
+          if (!image.complete) {
             await new Promise(
-
-              (
-                resolve
-              ) => {
-
+              (resolve) => {
                 image.addEventListener(
                   "load",
                   resolve,
-                  {
-                    once: true
-                  }
+                  { once: true }
                 );
-
 
                 image.addEventListener(
                   "error",
                   resolve,
-                  {
-                    once: true
-                  }
+                  { once: true }
                 );
-
               }
-
             );
-
           }
-
-
-          /*
-            图片虽然 complete，
-            也可能尚未真正完成解码。
-
-            decode() 可以让打印更稳定。
-          */
 
           if (
             typeof image.decode
             === "function"
           ) {
-
             try {
-
               await image.decode();
-
-            } catch (
-              error
-            ) {
-
-              /*
-                缓存图片或部分浏览器中
-                decode() 可能报错。
-
-                不影响后续打印。
-              */
-
-            }
-
+            } catch (_) {}
           }
-
         }
-
       )
-
     );
-
-
-    /* =========================
-       等待字体
-    ========================= */
-
-    if (
-      document.fonts
-      &&
-      document.fonts.ready
-    ) {
-
-      try {
-
-        await document.fonts.ready;
-
-      } catch (
-        error
-      ) {
-
-        /*
-          字体加载失败时，
-          浏览器会自动回退系统字体。
-        */
-
-      }
-
-    }
-
-
-    /* =========================
-       强制计算一次布局
-    ========================= */
-
-    void document.body.offsetHeight;
-
-
-    /* =========================
-       等待两帧完整绘制
-    ========================= */
-
-    await nextPaint();
-
-
-    /*
-      再留一点稳定时间。
-
-      避免 Chrome 在刚刚完成
-      DOM + 字体更新时马上抓取打印快照。
-    */
-
-    await new Promise(
-
-      (
-        resolve
-      ) =>
-
-        setTimeout(
-          resolve,
-          150
-        )
-
-    );
-
   }
 
+  async function printResume() {
 
-  /* =========================================================
-     点击打印
-  ========================================================= */
+    const iframe =
+      document.createElement(
+        "iframe"
+      );
 
-  printButton.addEventListener(
+    iframe.setAttribute(
+      "aria-hidden",
+      "true"
+    );
 
-    "click",
+    iframe.style.position =
+      "fixed";
 
-    async () => {
+    iframe.style.right =
+      "0";
 
-      /*
-        防止重复点击。
-      */
+    iframe.style.bottom =
+      "0";
 
-      printButton.disabled =
-        true;
+    iframe.style.width =
+      "1px";
 
+    iframe.style.height =
+      "1px";
 
-      try {
+    iframe.style.border =
+      "0";
 
-        /*
-          等待所有资源准备完成。
-        */
+    iframe.style.opacity =
+      "0";
 
-        await waitForPrintReady();
+    iframe.style.pointerEvents =
+      "none";
 
+    document.body.appendChild(
+      iframe
+    );
 
-        /*
-          打开浏览器打印窗口。
-        */
+    const printWindow =
+      iframe.contentWindow;
 
-        window.print();
+    const printDocument =
+      iframe.contentDocument
+      ||
+      printWindow.document;
 
-      } catch (
-        error
+    printDocument.open();
+
+    printDocument.write(`
+      <!doctype html>
+
+      <html lang="zh-CN">
+
+      <head>
+
+        <meta charset="UTF-8" />
+
+        <base
+          href="${esc(document.baseURI)}"
+        />
+
+        <title>
+          林镇伟｜AI产品经理简历
+        </title>
+
+        <style>
+          ${PRINT_CSS}
+        </style>
+
+      </head>
+
+      <body>
+
+        <main class="resume">
+          ${resume.innerHTML}
+        </main>
+
+      </body>
+
+      </html>
+    `);
+
+    printDocument.close();
+
+    try {
+      if (
+        printDocument.fonts
+        &&
+        printDocument.fonts.ready
       ) {
+        await printDocument.fonts.ready;
+      }
+    } catch (_) {}
 
-        console.error(
-          "打印准备失败：",
-          error
-        );
+    await waitForImages(
+      printDocument
+    );
 
+    void printDocument.body.offsetHeight;
 
-        /*
-          即使准备流程出错，
-          仍然允许用户打开打印窗口。
-        */
+    await new Promise(
+      (resolve) =>
+        printWindow.requestAnimationFrame(
+          () =>
+            printWindow.requestAnimationFrame(
+              resolve
+            )
+        )
+    );
 
-        window.print();
+    await new Promise(
+      (resolve) =>
+        setTimeout(
+          resolve,
+          100
+        )
+    );
 
-      } finally {
+    printWindow.focus();
+    printWindow.print();
+
+    const cleanup = () => {
+      setTimeout(
+        () => {
+          if (iframe.parentNode) {
+            iframe.parentNode.removeChild(
+              iframe
+            );
+          }
+        },
+        500
+      );
+    };
+
+    printWindow.addEventListener(
+      "afterprint",
+      cleanup,
+      {
+        once: true
+      }
+    );
+
+    setTimeout(
+      cleanup,
+      60000
+    );
+  }
+
+  /*
+    重要：
+    app.js 只监听已有 #printButton，
+    不创建下载按钮。
+    因此不会再出现两个“下载”。
+  */
+
+  const printButton =
+    document.querySelector(
+      "#printButton"
+    );
+
+  if (printButton) {
+
+    printButton.addEventListener(
+      "click",
+      async () => {
+
+        if (
+          printButton.disabled
+        ) {
+          return;
+        }
 
         printButton.disabled =
-          false;
+          true;
 
+        try {
+
+          await printResume();
+
+        } catch (error) {
+
+          console.error(
+            "打印失败：",
+            error
+          );
+
+          alert(
+            "打印初始化失败，请刷新页面后重试。"
+          );
+
+        } finally {
+
+          printButton.disabled =
+            false;
+
+        }
       }
-
-    }
-
-  );
-
-
-  /* =========================================================
-     打印窗口关闭
-  ========================================================= */
-
-  window.addEventListener(
-
-    "afterprint",
-
-    () => {
-
-      printButton.disabled =
-        false;
-
-    }
-
-  );
-
+    );
+  }
 })();
