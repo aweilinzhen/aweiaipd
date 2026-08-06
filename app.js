@@ -417,15 +417,9 @@
 
       <!-- 工作经历：后两家公司 -->
 
-      ${
-        section(
-          "工作经历（续）",
-
-          secondPageExperienceHtml,
-
-          "continuation-section"
-        )
-      }
+      <section class="resume-section continuation-section">
+        ${secondPageExperienceHtml}
+      </section>
 
 
       <!-- 项目经历 -->
@@ -454,35 +448,6 @@
   `;
 
 
-  /* =========================================================
-     PC 连续长页模式
-
-     PC 浏览时隐藏：
-     “工作经历（续）”
-
-     这样页面看起来仍然是：
-
-     工作经历
-     有信云
-     豌豆思维
-     滴普科技
-     道一云
-
-     而不是两个工作经历模块。
-
-     打印时 print.js / print.css 会恢复标题。
-  ========================================================= */
-
-  const continuationTitle =
-    document.querySelector(
-      ".continuation-section .section-title"
-    );
-
-  if (continuationTitle) {
-    continuationTitle.classList.add(
-      "screen-only-hidden-title"
-    );
-  }
 
 
   /* =========================================================
