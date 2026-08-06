@@ -508,22 +508,6 @@
     sourceRoot.innerHTML =
       snapshotHtml;
 
-    /*
-      PC 长页模式隐藏的“工作经历（续）”，
-      在打印源中恢复。
-    */
-    sourceRoot
-      .querySelectorAll(
-        ".screen-only-hidden-title"
-      )
-      .forEach(
-        (element) => {
-          element.classList.remove(
-            "screen-only-hidden-title"
-          );
-        }
-      );
-
     try {
       setStatus(
         "正在准备字体和图片…"
