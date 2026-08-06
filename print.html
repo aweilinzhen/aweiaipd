@@ -24,8 +24,15 @@
 
   <link
     rel="stylesheet"
-    href="print.css?v=20260721-print-spacious-v5"
+    href="print.css?v=20260806-remove-continuation-v1"
   />
+
+  <!-- 强制隐藏第二页顶部的“工作经历（续）”及其下方横线。 -->
+  <style>
+    .continuation-section > .section-title {
+      display: none !important;
+    }
+  </style>
 
 </head>
 
@@ -107,7 +114,7 @@
   -->
 
   <script
-    src="print.js?v=20260721-print-canvas-v3"
+    src="print.js?v=20260806-remove-continuation-v1"
   ></script>
 
 
